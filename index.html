@@ -66,7 +66,8 @@
                         <li>檔案上傳後將自動更新 GitHub 上的 <code class="bg-indigo-900 px-1 rounded">quiz_data.json</code>。</li>
                     </ul>
                     <div class="mt-4">
-                        <p class="font-bold text-indigo-100 text-xs mb-2">📄 JSON 格式範例：</p>
+
+                        <p class="font-bold text-indigo-100 text-xs mb-2">📄 JSON 格式範例（含未來可擴充欄位）：</p>
                         <pre class="bg-indigo-900/80 border border-indigo-700 rounded-xl p-3 text-[11px] leading-relaxed text-indigo-100 overflow-x-auto"><code>[
   {
     "date": "2026-04-20",
@@ -74,6 +75,19 @@
     "question_pinyin": "「apple」 de Zhōngwén yìsi shì shénme?",
     "options": ["蘋果", "香蕉", "葡萄", "西瓜"],
     "options_pinyin": ["píngguǒ", "xiāngjiāo", "pútáo", "xīguā"],
+    "answer": 0,
+    "hint": "",
+    "multi_answers": [],
+    "short_answer": "",
+    "tags": [],
+    "difficulty": ""
+  }
+]</code></pre>
+                        <p class="text-[11px] text-indigo-300 mt-2 leading-relaxed">
+                            目前系統主要使用：<code class="bg-indigo-900 px-1 rounded">date/question/options/answer</code>；
+                            若有提供 <code class="bg-indigo-900 px-1 rounded">city</code> 會顯示在題目卡片上；
+                            其餘欄位可先留白，方便未來擴充提示、多選題、簡答題等功能。
+                        </p>
     "answer": 0
   }
 ]</code></pre>
@@ -311,8 +325,9 @@
                 card.className = "bg-white p-6 md:p-10 rounded-[2rem] shadow-lg border border-slate-100 fade-in";
                 card.innerHTML = `
                     <div class="mb-8">
-                        <div class="flex items-center gap-3 mb-3">
+                        <div class="flex items-center gap-3 mb-3 flex-wrap">
                             <span class="bg-indigo-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Question ${idx + 1}</span>
+                            ${q.city ? `<span class="bg-sky-100 text-sky-700 text-[10px] font-black px-3 py-1 rounded-full tracking-widest">CITY · ${q.city}</span>` : ''}
                         </div>
                         <h3 class="text-2xl md:text-3xl text-slate-800 font-black mb-2 leading-snug">${q.question}</h3>
                         ${q.question_pinyin ? `<div class="pinyin text-lg mb-1">${q.question_pinyin}</div>` : ''}
