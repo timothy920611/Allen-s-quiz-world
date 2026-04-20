@@ -212,6 +212,16 @@
             }
         }
 
+        function githubHeaders(token, contentType = false) {
+            const headers = {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/vnd.github+json',
+                'X-GitHub-Api-Version': '2022-11-28'
+            };
+            if (contentType) headers['Content-Type'] = 'application/json';
+            return headers;
+        }
+
         async function fetchQuizData() {
             const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}`;
             try {
@@ -266,7 +276,7 @@
                     
                     // 先取得檔案 SHA 才能更新
                     const res = await fetch(apiUrl, {
-                        headers: { 'Authorization': `token ${finalToken}` }
+                        headers: githubHeaders(finalToken)
                     });
                     if (res.ok) {
                         const data = await res.json();
@@ -275,10 +285,7 @@
 
                     const putRes = await fetch(apiUrl, {
                         method: 'PUT',
-                        headers: {
-                            'Authorization': `token ${finalToken}`,
-                            'Content-Type': 'application/json',
-                        },
+                        headers: githubHeaders(finalToken, true),
                         body: JSON.stringify({
                             message: `Auto-Update via Generator: ${new Date().toLocaleString()}`,
                             content: btoa(unescape(encodeURIComponent(content))),
@@ -291,6 +298,9 @@
                         setTimeout(() => location.reload(), 2000);
                     } else {
                         const err = await putRes.json();
+                        if ((err.message || "").includes("Resource not accessible by personal access token")) {
+                            throw new Error("PAT 權限不足：請確認 Token 可存取此 repo，並開啟 Contents: Read and write 權限（必要時啟用 SSO）。");
+                        }
                         throw new Error(err.message || "上傳失敗");
                     }
                 } catch (err) {
