@@ -403,8 +403,11 @@
                     wrongItems.push({
                         questionIndex: idx + 1,
                         question: q.question,
+                        questionPinyin: q.question_pinyin || '',
                         correctAnswer: q.options[q.answer],
-                        userAnswer: q.options[userChoice]
+                        correctAnswerPinyin: (q.options_pinyin && q.options_pinyin[q.answer]) ? q.options_pinyin[q.answer] : '',
+                        userAnswer: q.options[userChoice],
+                        userAnswerPinyin: (q.options_pinyin && q.options_pinyin[userChoice]) ? q.options_pinyin[userChoice] : ''
                     });
                 }
             });
@@ -442,8 +445,15 @@
                     ${wrongItems.map(item => `
                         <div class="bg-white border border-rose-100 rounded-2xl p-4 md:p-5">
                             <p class="text-slate-800 font-bold mb-2">第 ${item.questionIndex} 題：${item.question}</p>
-                            <p class="text-slate-600">你的答案：<span class="font-bold text-rose-600">${item.userAnswer}</span></p>
-                            <p class="text-slate-600">正確答案：<span class="font-bold text-emerald-600">${item.correctAnswer}</span></p>
+                            ${item.questionPinyin ? `<p class="pinyin mb-2">${item.questionPinyin}</p>` : ''}
+                            <p class="text-slate-600">
+                                你的答案：<span class="font-bold text-rose-600">${item.userAnswer}</span>
+                                ${item.userAnswerPinyin ? `<span class="pinyin ml-2">${item.userAnswerPinyin}</span>` : ''}
+                            </p>
+                            <p class="text-slate-600">
+                                正確答案：<span class="font-bold text-emerald-600">${item.correctAnswer}</span>
+                                ${item.correctAnswerPinyin ? `<span class="pinyin ml-2">${item.correctAnswerPinyin}</span>` : ''}
+                            </p>
                         </div>
                     `).join('')}
                 </div>
