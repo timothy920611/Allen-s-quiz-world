@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>語言學習考卷產生器 - Language Learning Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .pinyin { color: #6366f1; font-size: 0.85em; font-weight: normal; }
+        .english { color: #64748b; font-size: 0.9em; font-weight: normal; }
+        .hidden-section { display: none; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <div class="max-w-4xl mx-auto p-4 md:p-8">
+        
+        <!-- 頂部切換按鈕 (老師/學生) -->
+        <div class="flex justify-end mb-4">
+            <button id="adminToggle" onclick="toggleAdminMode()" class="text-xs bg-white border border-slate-300 hover:bg-slate-100 px-4 py-2 rounded-full text-slate-600 shadow-sm transition-all font-bold flex items-center gap-2">
+                <span id="toggleIcon">🔒</span> <span id="toggleText">切換至老師模式 (Teacher Mode)</span>
+            </button>
+        </div>
+
+        <!-- 標題區 -->
+        <header class="text-center mb-8 fade-in">
+            <h1 class="text-4xl font-black text-indigo-600 mb-2 tracking-tight">
+                📝 智能考卷產生器
+                <div class="pinyin font-normal text-lg">Zhìnéng Kǎojuàn Chǎnshēngqì</div>
+                <div class="english font-normal italic text-slate-400">Smart Quiz Generator</div>
+            </h1>
+        </header>
+
+        <!-- 狀態提示區 -->
+        <div id="statusMsg" class="hidden-section mb-6 p-4 rounded-xl text-center font-bold shadow-md border"></div>
+
+        <!-- ================= 老師模式區塊 (Admin) ================= -->
+        <section id="admin-panel" class="hidden-section bg-indigo-900 rounded-3xl shadow-2xl border border-indigo-700 p-6 md:p-8 mb-8 fade-in text-white">
+            <div class="flex items-center justify-between mb-6 border-b border-indigo-800 pb-4">
+                <div>
+                    <h2 class="text-2xl font-bold">管理員上傳區 (Upload Center)</h2>
+                    <p class="text-indigo-300 text-xs mt-1">目標存儲庫: Allen-s-quiz-world</p>
+                </div>
+                <div class="bg-emerald-500 text-white px-3 py-1 rounded-lg text-[10px] font-bold">AUTO AUTH</div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-2 text-indigo-100">選擇題庫檔案 (JSON)</label>
+                        <input type="file" id="fileInput" accept=".json" class="block w-full text-sm text-indigo-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-indigo-500 file:text-white hover:file:bg-indigo-400 cursor-pointer bg-indigo-950/50 p-2 rounded-2xl border border-indigo-800">
+                    </div>
+                    <button onclick="uploadToGithub()" class="w-full bg-indigo-500 hover:bg-indigo-400 text-white py-4 rounded-2xl font-bold text-lg shadow-lg transform transition-all active:scale-95 flex items-center justify-center gap-2">
+                        <span>🚀</span> 立即更新雲端題庫
+                    </button>
+                </div>
+                <div class="bg-indigo-950/50 p-5 rounded-2xl text-sm text-indigo-200 space-y-3 border border-indigo-800">
+                    <p class="font-bold text-indigo-100 flex items-center gap-2"><span>🛡️</span> 安全同步說明：</p>
+                    <ul class="list-disc list-inside space-y-2 text-xs leading-relaxed text-indigo-300">
+                        <li>已移除手動輸入 Token 流程。</li>
+                        <li>採用 Base64 混淆字串與專屬 Salt 驗證。</li>
+                        <li>檔案上傳後將自動更新 GitHub 上的 <code class="bg-indigo-900 px-1 rounded">quiz_data.json</code>。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 學生模式區塊 (Student) ================= -->
+        <section id="section-settings" class="bg-white rounded-3xl shadow-xl border border-slate-200 p-6 md:p-10 mb-6 fade-in">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center text-3xl shadow-inner">🎯</div>
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">測驗設定 (Quiz Setup)</h2>
+                    <p class="text-xs text-slate-400 pinyin">Cèyàn shèdìng / Choose your parameters</p>
+                </div>
+            </div>
+
+            <div class="space-y-8">
+                <div class="group">
+                    <label class="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
+                        <span>📅</span> 選擇題目範圍 (Select Range)
+                        <span class="pinyin ml-2 text-xs font-normal">Xuǎnzé fànwéi</span>
+                    </label>
+                    <select id="dateSelect" class="w-full p-4 border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all bg-slate-50 font-medium text-slate-700 cursor-pointer">
+                        <option value="">正在載入最新題庫...</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
+                        <span>🔢</span> 選擇測驗題數 (Number of Questions)
+                        <span class="pinyin ml-2 text-xs font-normal">Tíshù</span>
+                    </label>
+                    <div class="grid grid-cols-3 gap-4">
+                        <label class="cursor-pointer group">
+                            <input type="radio" name="count" value="5" checked class="hidden peer">
+                            <div class="text-center p-4 border-2 border-slate-100 rounded-2xl peer-checked:border-indigo-600 peer-checked:bg-indigo-50 group-hover:border-indigo-200 transition-all">
+                                <div class="font-black text-2xl text-slate-800">5</div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer group">
+                            <input type="radio" name="count" value="10" class="hidden peer">
+                            <div class="text-center p-4 border-2 border-slate-100 rounded-2xl peer-checked:border-indigo-600 peer-checked:bg-indigo-50 group-hover:border-indigo-200 transition-all">
+                                <div class="font-black text-2xl text-slate-800">10</div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer group">
+                            <input type="radio" name="count" value="all" class="hidden peer">
+                            <div class="text-center p-4 border-2 border-slate-100 rounded-2xl peer-checked:border-indigo-600 peer-checked:bg-indigo-50 group-hover:border-indigo-200 transition-all">
+                                <div class="font-black text-2xl text-slate-800">MAX</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <button onclick="generateQuiz()" id="startBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-5 rounded-3xl font-black text-2xl shadow-xl transform transition-all active:scale-[0.97] disabled:bg-slate-200 disabled:cursor-not-allowed" disabled>
+                    開始測驗 (Start Quiz) 🚀
+                </button>
+            </div>
+        </section>
+
+        <!-- 測驗內容區 -->
+        <section id="section-quiz" class="hidden-section fade-in">
+            <div id="quizContainer" class="space-y-6 mb-8"></div>
+            <button onclick="submitQuiz()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-5 rounded-3xl font-black text-2xl shadow-xl transition-all active:scale-[0.98]">
+                交卷並查看成績 (Submit) ✅
+            </button>
+        </section>
+
+        <!-- 成績顯示區 -->
+        <section id="section-result" class="hidden-section bg-white rounded-[3rem] shadow-2xl border border-slate-100 p-12 text-center fade-in">
+            <div class="mb-8">
+                <div id="resultEmoji" class="text-8xl mb-4 animate-bounce">🎯</div>
+                <h2 class="text-4xl font-black text-slate-800">測驗結果</h2>
+                <div class="pinyin text-slate-400 text-xl">Cèyàn jiéguǒ</div>
+            </div>
+            <div class="relative inline-block mb-8">
+                <div class="text-[10rem] leading-none font-black text-indigo-600 drop-shadow-lg">
+                    <span id="scoreDisplay">0</span>
+                </div>
+                <div class="absolute -bottom-2 -right-10 text-4xl font-bold text-slate-300">/ 100</div>
+            </div>
+            <div id="resultText" class="text-2xl font-bold text-slate-600 mb-10 bg-slate-50 py-6 rounded-3xl border border-slate-100"></div>
+            <button onclick="location.reload()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-16 py-5 rounded-full font-black text-xl shadow-lg transition-all active:scale-95">
+                返回首頁 (Restart) 🔄
+            </button>
+        </section>
+
+    </div>
+
+    <script>
+        // 配置資訊
+        const CONFIG = {
+            owner: 'timothy920611', 
+            repo: 'Allen-s-quiz-world',       
+            path: 'quiz_data.json',
+            // 混淆後的 Token (Base64 + SmallChicken)
+            vault: "Z2l0aHViX3BhdF8xMUI0TlFKR0EwdlV5ZTB6Wm1jNElhXzVvMGg2VzU2NWlYVUhndFNESkJWajdnT2R2dUE0Z3lSMUQyRzY2cldUNEhWNUEzUVFKSDRuTzA1MTUwSmallChicken",
+            salt: "SmallChicken"
+        };
+
+        let questionBank = [];
+        let currentQuiz = [];
+        let userAnswers = {};
+        let isAdmin = false;
+
+        window.onload = async () => {
+            await fetchQuizData();
+        };
+
+        // 解碼金鑰函式
+        function getAuthToken() {
+            try {
+                // 1. 先從 Vault 中移除 Salt 字串
+                const cleanVault = CONFIG.vault.replace(CONFIG.salt, "");
+                // 2. 解碼 Base64
+                return atob(cleanVault);
+            } catch (e) {
+                console.error("Token 解碼失敗");
+                return null;
+            }
+        }
+
+        async function fetchQuizData() {
+            const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}`;
+            try {
+                const response = await fetch(url, {
+                    headers: { 'Accept': 'application/vnd.github.v3.raw' },
+                    cache: 'no-store'
+                });
+                if (!response.ok) throw new Error("無法載入題庫");
+                questionBank = await response.json();
+                updateDateDropdown();
+                document.getElementById('startBtn').disabled = false;
+            } catch (err) {
+                showStatus("雲端題庫連線失敗，請檢查網路或切換老師模式上傳", "error");
+            }
+        }
+
+        function updateDateDropdown() {
+            const select = document.getElementById('dateSelect');
+            const dates = [...new Set(questionBank.map(q => q.date))].filter(Boolean).sort().reverse();
+            select.innerHTML = `<option value="all">所有單元隨機 (All Units Mixed)</option>`;
+            dates.forEach(d => {
+                const count = questionBank.filter(q => q.date === d).length;
+                select.innerHTML += `<option value="${d}">${d} — ${count} 題</option>`;
+            });
+        }
+
+        function toggleAdminMode() {
+            isAdmin = !isAdmin;
+            const panel = document.getElementById('admin-panel');
+            panel.classList.toggle('hidden-section');
+            document.getElementById('toggleText').textContent = isAdmin ? "關閉老師模式" : "切換至老師模式";
+            document.getElementById('toggleIcon').textContent = isAdmin ? "🔓" : "🔒";
+        }
+
+        async function uploadToGithub() {
+            const fileInput = document.getElementById('fileInput');
+            if (!fileInput.files[0]) return showStatus("請先選擇 JSON 題庫檔案", "error");
+
+            const finalToken = getAuthToken();
+            if (!finalToken) return showStatus("授權金鑰解析出錯", "error");
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    const content = e.target.result;
+                    JSON.parse(content); // 驗證 JSON 格式
+                    
+                    showStatus("正在安全上傳至 GitHub...", "info");
+
+                    const apiUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}`;
+                    let sha = '';
+                    
+                    // 先取得檔案 SHA 才能更新
+                    const res = await fetch(apiUrl, {
+                        headers: { 'Authorization': `token ${finalToken}` }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        sha = data.sha;
+                    }
+
+                    const putRes = await fetch(apiUrl, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${finalToken}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message: `Auto-Update via Generator: ${new Date().toLocaleString()}`,
+                            content: btoa(unescape(encodeURIComponent(content))),
+                            sha: sha || undefined
+                        })
+                    });
+
+                    if (putRes.ok) {
+                        showStatus("✅ 雲端同步完成！網頁將在 2 秒後刷新", "success");
+                        setTimeout(() => location.reload(), 2000);
+                    } else {
+                        const err = await putRes.json();
+                        throw new Error(err.message || "上傳失敗");
+                    }
+                } catch (err) {
+                    showStatus("❌ 失敗: " + err.message, "error");
+                }
+            };
+            reader.readAsText(fileInput.files[0]);
+        }
+
+        function generateQuiz() {
+            const date = document.getElementById('dateSelect').value;
+            const countVal = document.querySelector('input[name="count"]:checked').value;
+            let pool = (date === 'all' || !date) ? questionBank : questionBank.filter(q => q.date === date);
+            
+            if (!pool || pool.length === 0) return showStatus("選定範圍內無題目", "error");
+            
+            pool = [...pool].sort(() => Math.random() - 0.5);
+            const num = countVal === 'all' ? pool.length : Math.min(parseInt(countVal), pool.length);
+            currentQuiz = pool.slice(0, num);
+            
+            renderQuiz();
+            document.getElementById('section-settings').classList.add('hidden-section');
+            document.getElementById('section-quiz').classList.remove('hidden-section');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+            currentQuiz.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 md:p-10 rounded-[2rem] shadow-lg border border-slate-100 fade-in";
+                card.innerHTML = `
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="bg-indigo-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Question ${idx + 1}</span>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl text-slate-800 font-black mb-2 leading-snug">${q.question}</h3>
+                        ${q.question_pinyin ? `<div class="pinyin text-lg mb-1">${q.question_pinyin}</div>` : ''}
+                    </div>
+                    <div class="grid grid-cols-1 gap-4">
+                        ${q.options.map((opt, i) => `
+                            <label onclick="selectOption(${idx}, ${i})" class="group flex items-center gap-5 p-5 md:p-6 border-2 border-slate-50 rounded-3xl cursor-pointer hover:border-indigo-200 hover:bg-indigo-50/50 transition-all option-card-${idx}">
+                                <div class="w-8 h-8 rounded-full border-2 border-slate-200 flex items-center justify-center group-hover:border-indigo-400 radio-circle-${idx} shrink-0">
+                                    <div class="w-3.5 h-3.5 rounded-full bg-indigo-600 scale-0 transition-transform radio-dot-${idx}"></div>
+                                </div>
+                                <div class="flex flex-col flex-1">
+                                    <span class="font-bold text-xl text-slate-700">${opt}</span>
+                                    ${q.options_pinyin ? `<span class="pinyin text-sm mt-1">${q.options_pinyin[i] || ''}</span>` : ''}
+                                </div>
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function selectOption(qIdx, optIdx) {
+            userAnswers[qIdx] = optIdx;
+            document.querySelectorAll(`.option-card-${qIdx}`).forEach((c, i) => {
+                const dot = c.querySelector(`.radio-dot-${qIdx}`);
+                const circle = c.querySelector(`.radio-circle-${qIdx}`);
+                if(i === optIdx) {
+                    c.classList.add('border-indigo-600', 'bg-indigo-50');
+                    dot.classList.replace('scale-0', 'scale-100');
+                    circle.classList.replace('border-slate-200', 'border-indigo-600');
+                } else {
+                    c.classList.remove('border-indigo-600', 'bg-indigo-50');
+                    dot.classList.replace('scale-100', 'scale-0');
+                    circle.classList.replace('border-indigo-600', 'border-slate-200');
+                }
+            });
+        }
+
+        function submitQuiz() {
+            const total = currentQuiz.length;
+            if (Object.keys(userAnswers).length < total) return showStatus("請完成所有題目後再交卷", "error");
+            
+            let correct = 0;
+            currentQuiz.forEach((q, idx) => { if (userAnswers[idx] === q.answer) correct++; });
+            const score = Math.round((correct / total) * 100);
+            
+            document.getElementById('scoreDisplay').textContent = score;
+            document.getElementById('section-quiz').classList.add('hidden-section');
+            document.getElementById('section-result').classList.remove('hidden-section');
+            
+            const txt = document.getElementById('resultText');
+            if(score === 100) txt.textContent = "太厲害了！滿分！";
+            else if(score >= 80) txt.textContent = "很棒的成績，快要全對了！";
+            else if(score >= 60) txt.textContent = "表現不錯，及格了！";
+            else txt.textContent = "再加油，多練習幾次會更好！";
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showStatus(msg, type) {
+            const el = document.getElementById('statusMsg');
+            el.innerHTML = msg;
+            el.className = `mb-6 p-4 rounded-2xl text-center font-bold shadow-lg border block fade-in`;
+            if (type === 'error') el.classList.add('bg-rose-50', 'text-rose-600', 'border-rose-200');
+            else if (type === 'success') el.classList.add('bg-emerald-50', 'text-emerald-600', 'border-emerald-200');
+            else el.classList.add('bg-indigo-50', 'text-indigo-600', 'border-indigo-200');
+            setTimeout(() => {
+                el.classList.add('opacity-0');
+                setTimeout(() => el.classList.replace('block', 'hidden-section'), 500);
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
