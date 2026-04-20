@@ -202,10 +202,20 @@
         // 解碼金鑰函式
         function getAuthToken() {
             try {
-                // 1. 先從 Vault 中移除 Salt 字串
-                const cleanVault = CONFIG.vault.replace(CONFIG.salt, "");
-                // 2. 解碼 Base64
-                return atob(cleanVault);
+                if (!CONFIG.vault || !CONFIG.salt) return null;
+
+                // 僅移除「尾端」Salt，避免誤刪 Base64 正文中相同片段
+                const hasSaltTail = CONFIG.vault.endsWith(CONFIG.salt);
+                const cleanVault = hasSaltTail
+                    ? CONFIG.vault.slice(0, -CONFIG.salt.length)
+                    : CONFIG.vault;
+
+                // 基本格式檢查（Base64）
+                if (!/^[A-Za-z0-9+/=]+$/.test(cleanVault)) return null;
+
+                // 解碼 Base64
+                const token = atob(cleanVault).trim();
+                return token.startsWith('github_pat_') ? token : null;
             } catch (e) {
                 console.error("Token 解碼失敗");
                 return null;
