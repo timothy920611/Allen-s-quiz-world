@@ -12,6 +12,7 @@
         .english { color: #64748b; font-size: 0.9em; font-weight: normal; }
         .hidden-section { display: none; }
         .fade-in { animation: fadeIn 0.4s ease-out; }
+        .history-scroll { max-height: 18rem; overflow-y: auto; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -147,6 +148,14 @@
                 <button onclick="generateQuiz()" id="startBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-5 rounded-3xl font-black text-2xl shadow-xl transform transition-all active:scale-[0.97] disabled:bg-slate-200 disabled:cursor-not-allowed" disabled>
                     開始測驗 (Start Quiz) 🚀
                 </button>
+
+                <div id="historyPanel" class="bg-slate-50 border border-slate-200 rounded-3xl p-5 hidden-section">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-black text-slate-700">📚 測驗紀錄</h3>
+                        <button onclick="clearQuizHistory()" class="text-xs font-bold text-rose-600 hover:text-rose-700">清除紀錄</button>
+                    </div>
+                    <div id="historyList" class="history-scroll space-y-2 text-sm text-slate-600"></div>
+                </div>
             </div>
         </section>
 
@@ -194,10 +203,13 @@
         let questionBank = [];
         let currentQuiz = [];
         let userAnswers = {};
+        let selectedRange = 'all';
         let isAdmin = false;
+        const QUIZ_HISTORY_KEY = 'allen_quiz_history_v1';
 
         window.onload = async () => {
             await fetchQuizData();
+            renderQuizHistory();
         };
 
         // 解碼金鑰函式
@@ -323,6 +335,7 @@
 
         function generateQuiz() {
             const date = document.getElementById('dateSelect').value;
+            selectedRange = date || 'all';
             const countVal = document.querySelector('input[name="count"]:checked').value;
             let pool = (date === 'all' || !date) ? questionBank : questionBank.filter(q => q.date === date);
             
@@ -450,6 +463,14 @@
             }
 
             renderAnswerReview(reviewItems);
+            saveQuizHistory({
+                date: new Date().toISOString(),
+                score,
+                correct,
+                total,
+                range: selectedRange || 'all'
+            });
+            renderQuizHistory();
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -494,6 +515,57 @@
                 el.classList.add('opacity-0');
                 setTimeout(() => el.classList.replace('block', 'hidden-section'), 500);
             }, 4000);
+        }
+
+        function getQuizHistory() {
+            try {
+                const raw = localStorage.getItem(QUIZ_HISTORY_KEY);
+                const parsed = raw ? JSON.parse(raw) : [];
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (err) {
+                return [];
+            }
+        }
+
+        function saveQuizHistory(record) {
+            const history = getQuizHistory();
+            history.unshift(record);
+            const limited = history.slice(0, 30);
+            localStorage.setItem(QUIZ_HISTORY_KEY, JSON.stringify(limited));
+        }
+
+        function renderQuizHistory() {
+            const panel = document.getElementById('historyPanel');
+            const list = document.getElementById('historyList');
+            const history = getQuizHistory();
+
+            if (history.length === 0) {
+                panel.classList.add('hidden-section');
+                list.innerHTML = '';
+                return;
+            }
+
+            panel.classList.remove('hidden-section');
+            list.innerHTML = history.map((item, idx) => {
+                const dt = new Date(item.date);
+                const dateText = Number.isNaN(dt.getTime())
+                    ? item.date
+                    : dt.toLocaleString('zh-TW', { hour12: false });
+                const rangeText = item.range === 'all' ? '所有單元' : item.range;
+                return `
+                    <div class="bg-white border border-slate-200 rounded-2xl p-3">
+                        <p class="font-bold text-slate-700">#${history.length - idx}｜${item.score} 分 (${item.correct}/${item.total})</p>
+                        <p class="text-xs text-slate-500">日期：${dateText}</p>
+                        <p class="text-xs text-slate-500">範圍：${rangeText}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function clearQuizHistory() {
+            localStorage.removeItem(QUIZ_HISTORY_KEY);
+            renderQuizHistory();
+            showStatus("已清除本機測驗紀錄", "success");
         }
     </script>
 </body>
