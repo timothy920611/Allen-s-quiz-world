@@ -1,0 +1,110 @@
+{
+  "date": "2026-04-21T06:05:59.324Z",
+  "studentName": "Timothy",
+  "score": 80,
+  "correct": 8,
+  "total": 10,
+  "range": "all",
+  "reviewItems": [
+    {
+      "questionIndex": 1,
+      "question": "Which is the meaning of “Lie”?",
+      "questionPinyin": "",
+      "isCorrect": true,
+      "correctAnswer": "谎言",
+      "correctAnswerPinyin": "huǎngyán",
+      "userAnswer": "谎言",
+      "userAnswerPinyin": "huǎngyán"
+    },
+    {
+      "questionIndex": 2,
+      "question": "“贫困” 的意思是？",
+      "questionPinyin": "Pínkùn de yìsi shì?",
+      "isCorrect": true,
+      "correctAnswer": "贫穷",
+      "correctAnswerPinyin": "pínqióng",
+      "userAnswer": "贫穷",
+      "userAnswerPinyin": "pínqióng"
+    },
+    {
+      "questionIndex": 3,
+      "question": "他们无法_____自己的标准。",
+      "questionPinyin": "Tāmen wúfǎ _____ zìjǐ de biāozhǔn.",
+      "isCorrect": true,
+      "correctAnswer": "放下",
+      "correctAnswerPinyin": "fàngxià",
+      "userAnswer": "放下",
+      "userAnswerPinyin": "fàngxià"
+    },
+    {
+      "questionIndex": 4,
+      "question": "把幸福_____一只蝴蝶。",
+      "questionPinyin": "Bǎ xìngfú _____ yì zhī húdié.",
+      "isCorrect": true,
+      "correctAnswer": "比作",
+      "correctAnswerPinyin": "bǐzuò",
+      "userAnswer": "比作",
+      "userAnswerPinyin": "bǐzuò"
+    },
+    {
+      "questionIndex": 5,
+      "question": "人人都渴望_____。",
+      "questionPinyin": "Rénrén dōu kěwàng _____.",
+      "isCorrect": false,
+      "correctAnswer": "幸福",
+      "correctAnswerPinyin": "xìngfú",
+      "userAnswer": "生气",
+      "userAnswerPinyin": "shēngqì"
+    },
+    {
+      "questionIndex": 6,
+      "question": "如果你伸手去_____它，它就会飞走。",
+      "questionPinyin": "Rúguǒ nǐ shēn shǒu qù _____ tā, tā jiù huì fēi zǒu.",
+      "isCorrect": true,
+      "correctAnswer": "抓",
+      "correctAnswerPinyin": "zhuā",
+      "userAnswer": "抓",
+      "userAnswerPinyin": "zhuā"
+    },
+    {
+      "questionIndex": 7,
+      "question": "虽然天气不好，他_____完成了比赛。",
+      "questionPinyin": "Suīrán tiānqì bù hǎo, tā _____ wánchéng le bǐsài.",
+      "isCorrect": true,
+      "correctAnswer": "仍然",
+      "correctAnswerPinyin": "réngrán",
+      "userAnswer": "仍然",
+      "userAnswerPinyin": "réngrán"
+    },
+    {
+      "questionIndex": 8,
+      "question": "当一个人感到害怕、紧张时，这种情绪叫做什么？",
+      "questionPinyin": "Dāng yí gè rén gǎndào hàipà, jǐnzhāng shí, zhè zhǒng qíngxù jiàozuò shénme?",
+      "isCorrect": true,
+      "correctAnswer": "恐惧",
+      "correctAnswerPinyin": "kǒngjù",
+      "userAnswer": "恐惧",
+      "userAnswerPinyin": "kǒngjù"
+    },
+    {
+      "questionIndex": 9,
+      "question": "他们总是感到_____。",
+      "questionPinyin": "Tāmen zǒng shì gǎndào _____.",
+      "isCorrect": false,
+      "correctAnswer": "不安",
+      "correctAnswerPinyin": "bù’ān",
+      "userAnswer": "开心",
+      "userAnswerPinyin": "kāixīn"
+    },
+    {
+      "questionIndex": 10,
+      "question": "“童年” 指的是哪一个阶段？",
+      "questionPinyin": "Tóngnián zhǐ de shì nǎ yí gè jiēduàn?",
+      "isCorrect": true,
+      "correctAnswer": "小时候",
+      "correctAnswerPinyin": "xiǎoshíhòu",
+      "userAnswer": "小时候",
+      "userAnswerPinyin": "xiǎoshíhòu"
+    }
+  ]
+}
