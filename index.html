@@ -417,6 +417,23 @@
             });
         }
 
+        function normalizeAnswerIndexes(q) {
+            if (!q || !Array.isArray(q.options)) return [];
+
+            const candidates = [];
+            if (Number.isInteger(q.answer)) {
+                candidates.push(q.answer);
+            }
+            if (Array.isArray(q.answer)) {
+                candidates.push(...q.answer);
+            }
+            if (Array.isArray(q.multi_answers)) {
+                candidates.push(...q.multi_answers);
+            }
+
+            return [...new Set(candidates.filter(i => Number.isInteger(i) && i >= 0 && i < q.options.length))];
+        }
+
         function submitQuiz() {
             const total = currentQuiz.length;
             if (Object.keys(userAnswers).length < total) return showStatus("請完成所有題目後再交卷", "error");
@@ -424,15 +441,22 @@
             let correct = 0;
             const reviewItems = currentQuiz.map((q, idx) => {
                 const userChoice = userAnswers[idx];
-                const isCorrect = userChoice === q.answer;
+                const correctIndexes = normalizeAnswerIndexes(q);
+                const isCorrect = correctIndexes.includes(userChoice);
                 if (isCorrect) correct++;
+
+                const correctAnswerList = correctIndexes.map(i => q.options[i]).filter(Boolean);
+                const correctPinyinList = correctIndexes
+                    .map(i => (q.options_pinyin && q.options_pinyin[i]) ? q.options_pinyin[i] : '')
+                    .filter(Boolean);
+
                 return {
                     questionIndex: idx + 1,
                     question: q.question,
                     questionPinyin: q.question_pinyin || '',
                     isCorrect,
-                    correctAnswer: q.options[q.answer],
-                    correctAnswerPinyin: (q.options_pinyin && q.options_pinyin[q.answer]) ? q.options_pinyin[q.answer] : '',
+                    correctAnswer: correctAnswerList.length > 0 ? correctAnswerList.join(' / ') : (q.short_answer || '（未提供）'),
+                    correctAnswerPinyin: correctPinyinList.join(' / '),
                     userAnswer: q.options[userChoice],
                     userAnswerPinyin: (q.options_pinyin && q.options_pinyin[userChoice]) ? q.options_pinyin[userChoice] : ''
                 };
