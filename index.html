@@ -20,7 +20,7 @@
 
     <div class="max-w-4xl mx-auto p-4 md:p-8">
         
-        <!-- 頂部切換按鈕 (老師/學生) -->
+        <!-- 頂部切換按鈕 -->
         <div class="flex justify-end mb-4">
             <button id="adminToggle" onclick="toggleAdminMode()" class="text-xs bg-white border border-slate-300 hover:bg-slate-100 px-4 py-2 rounded-full text-slate-600 shadow-sm transition-all font-bold flex items-center gap-2">
                 <span id="toggleIcon">🔒</span> <span id="toggleText">切換至老師模式 (Teacher Mode)</span>
@@ -39,7 +39,7 @@
         <!-- 狀態提示區 -->
         <div id="statusMsg" class="hidden-section mb-6 p-4 rounded-xl text-center font-bold shadow-md border"></div>
 
-        <!-- ================= 老師模式區塊 (Admin) ================= -->
+        <!-- 老師模式區塊 -->
         <section id="admin-panel" class="hidden-section bg-indigo-900 rounded-3xl shadow-2xl border border-indigo-700 p-6 md:p-8 mb-8 fade-in text-white">
             <div class="flex items-center justify-between mb-6 border-b border-indigo-800 pb-4">
                 <div>
@@ -50,7 +50,7 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="space-y-6">
+                <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium mb-2 text-indigo-100">選擇題庫檔案 (JSON)</label>
                         <input type="file" id="fileInput" accept=".json" class="block w-full text-sm text-indigo-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-indigo-500 file:text-white hover:file:bg-indigo-400 cursor-pointer bg-indigo-950/50 p-2 rounded-2xl border border-indigo-800">
@@ -58,6 +58,9 @@
                     <button onclick="uploadToGithub()" class="w-full bg-indigo-500 hover:bg-indigo-400 text-white py-4 rounded-2xl font-bold text-lg shadow-lg transform transition-all active:scale-95 flex items-center justify-center gap-2">
                         <span>🚀</span> 立即更新雲端題庫
                     </button>
+                    <a href="admin.html" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-4 rounded-2xl font-bold text-lg shadow-lg transition-all flex items-center justify-center gap-2 block text-center">
+                        <span>📊</span> 查看學生成績後台
+                    </a>
                 </div>
                 <div class="bg-indigo-950/50 p-5 rounded-2xl text-sm text-indigo-200 space-y-3 border border-indigo-800">
                     <p class="font-bold text-indigo-100 flex items-center gap-2"><span>🛡️</span> 安全同步說明：</p>
@@ -67,29 +70,14 @@
                         <li>檔案上傳後將自動更新 GitHub 上的 <code class="bg-indigo-900 px-1 rounded">quiz_data.json</code>。</li>
                     </ul>
                     <div class="mt-4">
-
-                        <p class="font-bold text-indigo-100 text-xs mb-2">📄 JSON 格式範例（含未來可擴充欄位）：</p>
+                        <p class="font-bold text-indigo-100 text-xs mb-2">📄 JSON 格式範例：</p>
                         <pre class="bg-indigo-900/80 border border-indigo-700 rounded-xl p-3 text-[11px] leading-relaxed text-indigo-100 overflow-x-auto"><code>[
   {
     "date": "2026-04-20",
     "question": "「apple」的中文意思是什麼？",
-    "question_pinyin": "「apple」 de Zhōngwén yìsi shì shénme?",
     "options": ["蘋果", "香蕉", "葡萄", "西瓜"],
-    "options_pinyin": ["píngguǒ", "xiāngjiāo", "pútáo", "xīguā"],
     "answer": 0,
-    "hint": "",
-    "multi_answers": [],
-    "short_answer": "",
-    "tags": [],
-    "difficulty": ""
-  }
-]</code></pre>
-                        <p class="text-[11px] text-indigo-300 mt-2 leading-relaxed">
-                            目前系統主要使用：<code class="bg-indigo-900 px-1 rounded">date/question/options/answer</code>；
-                            若有提供 <code class="bg-indigo-900 px-1 rounded">city</code> 會顯示在題目卡片上；
-                            其餘欄位可先留白，方便未來擴充提示、多選題、簡答題等功能。
-                        </p>
-    "answer": 0
+    "hint": ""
   }
 ]</code></pre>
                     </div>
@@ -97,7 +85,7 @@
             </div>
         </section>
 
-        <!-- ================= 學生模式區塊 (Student) ================= -->
+        <!-- 學生模式 -->
         <section id="section-settings" class="bg-white rounded-3xl shadow-xl border border-slate-200 p-6 md:p-10 mb-6 fade-in">
             <div class="flex items-center gap-4 mb-8">
                 <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center text-3xl shadow-inner">🎯</div>
@@ -108,7 +96,18 @@
             </div>
 
             <div class="space-y-8">
-                <div class="group">
+
+                <!-- 姓名欄 -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
+                        <span>👤</span> 輸入姓名或學號 (Name / Student ID)
+                    </label>
+                    <input id="studentNameInput" type="text" placeholder="請輸入你的名字或學號…"
+                        class="w-full p-4 border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all bg-slate-50 font-medium text-slate-700" />
+                </div>
+
+                <!-- 題目範圍 -->
+                <div>
                     <label class="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
                         <span>📅</span> 選擇題目範圍 (Select Range)
                         <span class="pinyin ml-2 text-xs font-normal">Xuǎnzé fànwéi</span>
@@ -118,6 +117,7 @@
                     </select>
                 </div>
 
+                <!-- 題數 -->
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
                         <span>🔢</span> 選擇測驗題數 (Number of Questions)
@@ -149,9 +149,10 @@
                     開始測驗 (Start Quiz) 🚀
                 </button>
 
+                <!-- 本機歷史紀錄 -->
                 <div id="historyPanel" class="bg-slate-50 border border-slate-200 rounded-3xl p-5 hidden-section">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-black text-slate-700">📚 測驗紀錄</h3>
+                        <h3 class="font-black text-slate-700">📚 本機測驗紀錄</h3>
                         <button onclick="clearQuizHistory()" class="text-xs font-bold text-rose-600 hover:text-rose-700">清除紀錄</button>
                     </div>
                     <div id="historyList" class="history-scroll space-y-2 text-sm text-slate-600"></div>
@@ -180,7 +181,8 @@
                 </div>
                 <div class="absolute -bottom-2 -right-10 text-4xl font-bold text-slate-300">/ 100</div>
             </div>
-            <div id="resultText" class="text-2xl font-bold text-slate-600 mb-10 bg-slate-50 py-6 rounded-3xl border border-slate-100"></div>
+            <div id="resultText" class="text-2xl font-bold text-slate-600 mb-6 bg-slate-50 py-6 rounded-3xl border border-slate-100"></div>
+            <div id="uploadStatus" class="hidden-section mb-6 text-sm font-bold px-4 py-3 rounded-2xl"></div>
             <div id="reviewSection" class="hidden-section text-left mb-10"></div>
             <button onclick="location.reload()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-16 py-5 rounded-full font-black text-xl shadow-lg transition-all active:scale-95">
                 返回首頁 (Restart) 🔄
@@ -190,12 +192,10 @@
     </div>
 
     <script>
-        // 配置資訊
         const CONFIG = {
-            owner: 'timothy920611', 
-            repo: 'Allen-s-quiz-world',       
+            owner: 'timothy920611',
+            repo: 'Allen-s-quiz-world',
             path: 'quiz_data.json',
-            // 混淆後的 Token (Base64 + SmallChicken)
             vault: "Z2l0aHViX3BhdF8xMUI0TlFKR0EwdlV5ZTB6Wm1jNElhXzVvMGg2VzU2NWlYVUhndFNESkJWajdnT2R2dUE0Z3lSMUQyRzY2cldUNEhWNUEzUVFKSDRuTzA1MTUwSmallChicken",
             salt: "SmallChicken"
         };
@@ -205,6 +205,7 @@
         let userAnswers = {};
         let selectedRange = 'all';
         let isAdmin = false;
+        let studentName = '';
         const QUIZ_HISTORY_KEY = 'allen_quiz_history_v1';
 
         window.onload = async () => {
@@ -212,51 +213,38 @@
             renderQuizHistory();
         };
 
-        // 解碼金鑰函式
+        // ── Token ──────────────────────────────────────────────
         function getAuthToken() {
             try {
                 if (!CONFIG.vault || !CONFIG.salt) return null;
-
-                // 僅移除「尾端」Salt，避免誤刪 Base64 正文中相同片段
                 const hasSaltTail = CONFIG.vault.endsWith(CONFIG.salt);
-                const cleanVault = hasSaltTail
-                    ? CONFIG.vault.slice(0, -CONFIG.salt.length)
-                    : CONFIG.vault;
-
-                // 基本格式檢查（Base64）
+                const cleanVault = hasSaltTail ? CONFIG.vault.slice(0, -CONFIG.salt.length) : CONFIG.vault;
                 if (!/^[A-Za-z0-9+/=]+$/.test(cleanVault)) return null;
-
-                // 解碼 Base64
                 const token = atob(cleanVault).trim();
                 return token.startsWith('github_pat_') ? token : null;
-            } catch (e) {
-                console.error("Token 解碼失敗");
-                return null;
-            }
+            } catch { return null; }
         }
 
         function githubHeaders(token, contentType = false) {
-            const headers = {
+            const h = {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/vnd.github+json',
                 'X-GitHub-Api-Version': '2022-11-28'
             };
-            if (contentType) headers['Content-Type'] = 'application/json';
-            return headers;
+            if (contentType) h['Content-Type'] = 'application/json';
+            return h;
         }
 
+        // ── 題庫載入 ────────────────────────────────────────────
         async function fetchQuizData() {
             const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}`;
             try {
-                const response = await fetch(url, {
-                    headers: { 'Accept': 'application/vnd.github.v3.raw' },
-                    cache: 'no-store'
-                });
-                if (!response.ok) throw new Error("無法載入題庫");
-                questionBank = await response.json();
+                const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github.v3.raw' }, cache: 'no-store' });
+                if (!res.ok) throw new Error();
+                questionBank = await res.json();
                 updateDateDropdown();
                 document.getElementById('startBtn').disabled = false;
-            } catch (err) {
+            } catch {
                 showStatus("雲端題庫連線失敗，請檢查網路或切換老師模式上傳", "error");
             }
         }
@@ -271,10 +259,10 @@
             });
         }
 
+        // ── 老師模式 ────────────────────────────────────────────
         function toggleAdminMode() {
             isAdmin = !isAdmin;
-            const panel = document.getElementById('admin-panel');
-            panel.classList.toggle('hidden-section');
+            document.getElementById('admin-panel').classList.toggle('hidden-section');
             document.getElementById('toggleText').textContent = isAdmin ? "關閉老師模式" : "切換至老師模式";
             document.getElementById('toggleIcon').textContent = isAdmin ? "🔓" : "🔒";
         }
@@ -282,71 +270,60 @@
         async function uploadToGithub() {
             const fileInput = document.getElementById('fileInput');
             if (!fileInput.files[0]) return showStatus("請先選擇 JSON 題庫檔案", "error");
-
-            const finalToken = getAuthToken();
-            if (!finalToken) return showStatus("授權金鑰解析出錯", "error");
-
+            const token = getAuthToken();
+            if (!token) return showStatus("授權金鑰解析出錯", "error");
             const reader = new FileReader();
             reader.onload = async (e) => {
                 try {
                     const content = e.target.result;
-                    JSON.parse(content); // 驗證 JSON 格式
-                    
+                    JSON.parse(content);
                     showStatus("正在安全上傳至 GitHub...", "info");
-
                     const apiUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}`;
                     let sha = '';
-                    
-                    // 先取得檔案 SHA 才能更新
-                    const res = await fetch(apiUrl, {
-                        headers: githubHeaders(finalToken)
-                    });
-                    if (res.ok) {
-                        const data = await res.json();
-                        sha = data.sha;
-                    }
-
+                    const res = await fetch(apiUrl, { headers: githubHeaders(token) });
+                    if (res.ok) sha = (await res.json()).sha;
                     const putRes = await fetch(apiUrl, {
                         method: 'PUT',
-                        headers: githubHeaders(finalToken, true),
+                        headers: githubHeaders(token, true),
                         body: JSON.stringify({
-                            message: `Auto-Update via Generator: ${new Date().toLocaleString()}`,
+                            message: `Auto-Update: ${new Date().toLocaleString()}`,
                             content: btoa(unescape(encodeURIComponent(content))),
                             sha: sha || undefined
                         })
                     });
-
                     if (putRes.ok) {
                         showStatus("✅ 雲端同步完成！網頁將在 2 秒後刷新", "success");
                         setTimeout(() => location.reload(), 2000);
                     } else {
                         const err = await putRes.json();
-                        if ((err.message || "").includes("Resource not accessible by personal access token")) {
-                            throw new Error("PAT 權限不足：請確認 Token 可存取此 repo，並開啟 Contents: Read and write 權限（必要時啟用 SSO）。");
-                        }
                         throw new Error(err.message || "上傳失敗");
                     }
-                } catch (err) {
-                    showStatus("❌ 失敗: " + err.message, "error");
-                }
+                } catch (err) { showStatus("❌ 失敗: " + err.message, "error"); }
             };
             reader.readAsText(fileInput.files[0]);
         }
 
+        // ── 產生考卷 ────────────────────────────────────────────
         function generateQuiz() {
+            const nameVal = document.getElementById('studentNameInput').value.trim();
+            if (!nameVal) {
+                showStatus("請先輸入姓名或學號再開始測驗", "error");
+                document.getElementById('studentNameInput').focus();
+                return;
+            }
+            studentName = nameVal;
+
             const date = document.getElementById('dateSelect').value;
             selectedRange = date || 'all';
             const countVal = document.querySelector('input[name="count"]:checked').value;
             let pool = (date === 'all' || !date) ? questionBank : questionBank.filter(q => q.date === date);
-            
             if (!pool || pool.length === 0) return showStatus("選定範圍內無題目", "error");
 
             userAnswers = {};
-            
             pool = [...pool].sort(() => Math.random() - 0.5);
             const num = countVal === 'all' ? pool.length : Math.min(parseInt(countVal), pool.length);
             currentQuiz = pool.slice(0, num);
-            
+
             renderQuiz();
             document.getElementById('section-settings').classList.add('hidden-section');
             document.getElementById('section-quiz').classList.remove('hidden-section');
@@ -395,9 +372,7 @@
         }
 
         function toggleHint(qIdx) {
-            const hintEl = document.getElementById(`hint-${qIdx}`);
-            if (!hintEl) return;
-            hintEl.classList.toggle('hidden-section');
+            document.getElementById(`hint-${qIdx}`)?.classList.toggle('hidden-section');
         }
 
         function selectOption(qIdx, optIdx) {
@@ -405,7 +380,7 @@
             document.querySelectorAll(`.option-card-${qIdx}`).forEach((c, i) => {
                 const dot = c.querySelector(`.radio-dot-${qIdx}`);
                 const circle = c.querySelector(`.radio-circle-${qIdx}`);
-                if(i === optIdx) {
+                if (i === optIdx) {
                     c.classList.add('border-indigo-600', 'bg-indigo-50');
                     dot.classList.replace('scale-0', 'scale-100');
                     circle.classList.replace('border-slate-200', 'border-indigo-600');
@@ -419,37 +394,26 @@
 
         function normalizeAnswerIndexes(q) {
             if (!q || !Array.isArray(q.options)) return [];
-
             const candidates = [];
-            if (Number.isInteger(q.answer)) {
-                candidates.push(q.answer);
-            }
-            if (Array.isArray(q.answer)) {
-                candidates.push(...q.answer);
-            }
-            if (Array.isArray(q.multi_answers)) {
-                candidates.push(...q.multi_answers);
-            }
-
+            if (Number.isInteger(q.answer)) candidates.push(q.answer);
+            if (Array.isArray(q.answer)) candidates.push(...q.answer);
+            if (Array.isArray(q.multi_answers)) candidates.push(...q.multi_answers);
             return [...new Set(candidates.filter(i => Number.isInteger(i) && i >= 0 && i < q.options.length))];
         }
 
-        function submitQuiz() {
+        // ── 交卷 ────────────────────────────────────────────────
+        async function submitQuiz() {
             const total = currentQuiz.length;
             if (Object.keys(userAnswers).length < total) return showStatus("請完成所有題目後再交卷", "error");
-            
+
             let correct = 0;
             const reviewItems = currentQuiz.map((q, idx) => {
                 const userChoice = userAnswers[idx];
                 const correctIndexes = normalizeAnswerIndexes(q);
                 const isCorrect = correctIndexes.includes(userChoice);
                 if (isCorrect) correct++;
-
                 const correctAnswerList = correctIndexes.map(i => q.options[i]).filter(Boolean);
-                const correctPinyinList = correctIndexes
-                    .map(i => (q.options_pinyin && q.options_pinyin[i]) ? q.options_pinyin[i] : '')
-                    .filter(Boolean);
-
+                const correctPinyinList = correctIndexes.map(i => q.options_pinyin?.[i] || '').filter(Boolean);
                 return {
                     questionIndex: idx + 1,
                     question: q.question,
@@ -458,51 +422,87 @@
                     correctAnswer: correctAnswerList.length > 0 ? correctAnswerList.join(' / ') : (q.short_answer || '（未提供）'),
                     correctAnswerPinyin: correctPinyinList.join(' / '),
                     userAnswer: q.options[userChoice],
-                    userAnswerPinyin: (q.options_pinyin && q.options_pinyin[userChoice]) ? q.options_pinyin[userChoice] : ''
+                    userAnswerPinyin: q.options_pinyin?.[userChoice] || ''
                 };
             });
+
             const score = Math.round((correct / total) * 100);
-            
             document.getElementById('scoreDisplay').textContent = score;
             document.getElementById('section-quiz').classList.add('hidden-section');
             document.getElementById('section-result').classList.remove('hidden-section');
-            
+
             const txt = document.getElementById('resultText');
             const emoji = document.getElementById('resultEmoji');
-            if(score === 100) {
-                txt.textContent = "太厲害了！滿分！";
-                emoji.textContent = "🏆";
-            }
-            else if(score >= 80) {
-                txt.textContent = "很棒的成績，快要全對了！";
-                emoji.textContent = "🎉";
-            }
-            else if(score >= 60) {
-                txt.textContent = "表現不錯，及格了！";
-                emoji.textContent = "👍";
-            }
-            else {
-                txt.textContent = "再加油，多練習幾次會更好！";
-                emoji.textContent = "💪";
-            }
+            if (score === 100) { txt.textContent = "太厲害了！滿分！"; emoji.textContent = "🏆"; }
+            else if (score >= 80) { txt.textContent = "很棒的成績，快要全對了！"; emoji.textContent = "🎉"; }
+            else if (score >= 60) { txt.textContent = "表現不錯，及格了！"; emoji.textContent = "👍"; }
+            else { txt.textContent = "再加油，多練習幾次會更好！"; emoji.textContent = "💪"; }
 
             renderAnswerReview(reviewItems);
-            saveQuizHistory({
+
+            const record = {
                 date: new Date().toISOString(),
+                studentName,
                 score,
                 correct,
                 total,
                 range: selectedRange || 'all',
                 reviewItems
-            });
+            };
+
+            saveQuizHistory(record);
             renderQuizHistory();
-            
+            await uploadRecordToGithub(record);
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // ── 上傳單份考卷到 records/ ──────────────────────────────
+        async function uploadRecordToGithub(record) {
+            const statusEl = document.getElementById('uploadStatus');
+            statusEl.classList.remove('hidden-section');
+            statusEl.className = "mb-6 text-sm font-bold px-4 py-3 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-200";
+            statusEl.textContent = "⏳ 正在上傳成績到雲端...";
+
+            try {
+                const token = getAuthToken();
+                if (!token) throw new Error("Token 無效");
+
+                const now = new Date(record.date);
+                const pad = n => String(n).padStart(2, '0');
+                const datePart = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+                const timePart = `${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+                const safeName = record.studentName.replace(/[^a-zA-Z0-9\u4e00-\u9fa5_-]/g, '_');
+                const filename = `records/${datePart}_${timePart}_${safeName}.json`;
+
+                const content = btoa(unescape(encodeURIComponent(JSON.stringify(record, null, 2))));
+                const apiUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${filename}`;
+
+                const putRes = await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: githubHeaders(token, true),
+                    body: JSON.stringify({
+                        message: `Quiz result: ${record.studentName} ${datePart}`,
+                        content
+                    })
+                });
+
+                if (!putRes.ok) {
+                    const err = await putRes.json();
+                    throw new Error(err.message || "上傳失敗");
+                }
+
+                statusEl.className = "mb-6 text-sm font-bold px-4 py-3 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200";
+                statusEl.textContent = "✅ 成績已同步到雲端！老師可在後台查看。";
+            } catch (err) {
+                statusEl.className = "mb-6 text-sm font-bold px-4 py-3 rounded-2xl bg-amber-50 text-amber-700 border border-amber-200";
+                statusEl.textContent = `⚠️ 雲端同步失敗（${err.message}），成績已儲存在本機。`;
+            }
+        }
+
+        // ── 考卷檢討 ────────────────────────────────────────────
         function renderAnswerReview(reviewItems) {
             const section = document.getElementById('reviewSection');
-
             section.classList.remove('hidden-section');
             section.className = "text-left mb-10 bg-slate-50 border border-slate-200 rounded-3xl p-6 md:p-8";
             section.innerHTML = `
@@ -529,6 +529,7 @@
             `;
         }
 
+        // ── 狀態提示 ────────────────────────────────────────────
         function showStatus(msg, type) {
             const el = document.getElementById('statusMsg');
             el.innerHTML = msg;
@@ -542,47 +543,37 @@
             }, 4000);
         }
 
+        // ── 本機歷史紀錄 ────────────────────────────────────────
         function getQuizHistory() {
             try {
                 const raw = localStorage.getItem(QUIZ_HISTORY_KEY);
                 const parsed = raw ? JSON.parse(raw) : [];
                 return Array.isArray(parsed) ? parsed : [];
-            } catch (err) {
-                return [];
-            }
+            } catch { return []; }
         }
 
         function saveQuizHistory(record) {
             const history = getQuizHistory();
             history.unshift(record);
-            const limited = history.slice(0, 30);
-            localStorage.setItem(QUIZ_HISTORY_KEY, JSON.stringify(limited));
+            localStorage.setItem(QUIZ_HISTORY_KEY, JSON.stringify(history.slice(0, 30)));
         }
 
         function renderQuizHistory() {
             const panel = document.getElementById('historyPanel');
             const list = document.getElementById('historyList');
             const history = getQuizHistory();
-
-            if (history.length === 0) {
-                panel.classList.add('hidden-section');
-                list.innerHTML = '';
-                return;
-            }
-
+            if (history.length === 0) { panel.classList.add('hidden-section'); list.innerHTML = ''; return; }
             panel.classList.remove('hidden-section');
             list.innerHTML = history.map((item, idx) => {
                 const dt = new Date(item.date);
-                const dateText = Number.isNaN(dt.getTime())
-                    ? item.date
-                    : dt.toLocaleString('zh-TW', { hour12: false });
+                const dateText = isNaN(dt.getTime()) ? item.date : dt.toLocaleString('zh-TW', { hour12: false });
                 const rangeText = item.range === 'all' ? '所有單元' : item.range;
                 const hasDetail = Array.isArray(item.reviewItems) && item.reviewItems.length > 0;
                 return `
                     <div class="bg-white border border-slate-200 rounded-2xl p-3">
                         <div class="flex items-center justify-between gap-2">
                             <div>
-                                <p class="font-bold text-slate-700">#${history.length - idx}｜${item.score} 分 (${item.correct}/${item.total})</p>
+                                <p class="font-bold text-slate-700">#${history.length - idx}｜${item.studentName ? item.studentName + '・' : ''}${item.score} 分 (${item.correct}/${item.total})</p>
                                 <p class="text-xs text-slate-500">日期：${dateText}</p>
                                 <p class="text-xs text-slate-500">範圍：${rangeText}</p>
                             </div>
