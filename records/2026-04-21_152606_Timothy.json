@@ -1,0 +1,65 @@
+{
+  "date": "2026-04-21T07:26:06.797Z",
+  "studentName": "Timothy",
+  "score": 80,
+  "correct": 4,
+  "total": 5,
+  "range": "all",
+  "reviewItems": [
+    {
+      "questionIndex": 1,
+      "question": "“真理” 的英文是？",
+      "questionPinyin": "Zhēnlǐ de yīngwén shì?",
+      "isCorrect": true,
+      "correctAnswer": "Truth",
+      "correctAnswerPinyin": "",
+      "userAnswer": "Truth",
+      "userAnswerPinyin": "",
+      "explain": ""
+    },
+    {
+      "questionIndex": 2,
+      "question": "以下哪些属于正面概念？",
+      "questionPinyin": "Yǐxià nǎxiē shǔyú zhèngmiàn gàiniàn?",
+      "isCorrect": true,
+      "correctAnswer": "自由 / 真理",
+      "correctAnswerPinyin": "zìyóu / zhēnlǐ",
+      "userAnswer": "自由",
+      "userAnswerPinyin": "zìyóu",
+      "explain": ""
+    },
+    {
+      "questionIndex": 3,
+      "question": "如果你现在出发，应该还_____赶上火车。",
+      "questionPinyin": "Rúguǒ nǐ xiànzài chūfā, yīnggāi hái _____ gǎnshàng huǒchē.",
+      "isCorrect": true,
+      "correctAnswer": "能",
+      "correctAnswerPinyin": "néng",
+      "userAnswer": "能",
+      "userAnswerPinyin": "néng",
+      "explain": "English: The correct answer is 能 (néng). It shows possibility or ability. 简单中文：如果现在出发，应该还能赶上火车。 Pinyin: rúguǒ xiànzài chūfā, yīnggāi hái néng gǎnshàng huǒchē."
+    },
+    {
+      "questionIndex": 4,
+      "question": "“复活” 的意思是？",
+      "questionPinyin": "Fùhuó de yìsi shì?",
+      "isCorrect": false,
+      "correctAnswer": "重新活过来",
+      "correctAnswerPinyin": "chóngxīn huó guòlái",
+      "userAnswer": "开始工作",
+      "userAnswerPinyin": "kāishǐ gōngzuò",
+      "explain": ""
+    },
+    {
+      "questionIndex": 5,
+      "question": "他一直在_____那个人，看起来很可疑。",
+      "questionPinyin": "Tā yìzhí zài _____ nà gè rén, kàn qǐlái hěn kěyí.",
+      "isCorrect": true,
+      "correctAnswer": "跟踪",
+      "correctAnswerPinyin": "gēnzōng",
+      "userAnswer": "跟踪",
+      "userAnswerPinyin": "gēnzōng",
+      "explain": ""
+    }
+  ]
+}
