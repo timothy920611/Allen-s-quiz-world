@@ -1,0 +1,60 @@
+{
+  "date": "2026-04-21T05:07:39.752Z",
+  "studentName": "Timothy",
+  "score": 40,
+  "correct": 2,
+  "total": 5,
+  "range": "all",
+  "reviewItems": [
+    {
+      "questionIndex": 1,
+      "question": "他们总是担心做得不够好，所以常常感到_____。",
+      "questionPinyin": "Tāmen zǒng shì dānxīn zuò de bù gòu hǎo, suǒyǐ chángcháng gǎndào _____.",
+      "isCorrect": false,
+      "correctAnswer": "不安",
+      "correctAnswerPinyin": "bù'ān",
+      "userAnswer": "开心",
+      "userAnswerPinyin": "kāixīn"
+    },
+    {
+      "questionIndex": 2,
+      "question": "他们按照自己的_____来理解。",
+      "questionPinyin": "Tāmen ànzhào zìjǐ de _____ lái lǐjiě.",
+      "isCorrect": false,
+      "correctAnswer": "标准",
+      "correctAnswerPinyin": "biāozhǔn",
+      "userAnswer": "天气",
+      "userAnswerPinyin": "tiānqì"
+    },
+    {
+      "questionIndex": 3,
+      "question": "他们始终无法_____对自己的高标准。",
+      "questionPinyin": "Tāmen shǐzhōng wúfǎ _____ duì zìjǐ de gāo biāozhǔn.",
+      "isCorrect": true,
+      "correctAnswer": "放下",
+      "correctAnswerPinyin": "fàngxià",
+      "userAnswer": "放下",
+      "userAnswerPinyin": "fàngxià"
+    },
+    {
+      "questionIndex": 4,
+      "question": "我们要_____让它停在肩膀上。",
+      "questionPinyin": "Wǒmen yào _____ ràng tā tíng zài jiānbǎng shàng.",
+      "isCorrect": true,
+      "correctAnswer": "努力",
+      "correctAnswerPinyin": "nǔlì",
+      "userAnswer": "努力",
+      "userAnswerPinyin": "nǔlì"
+    },
+    {
+      "questionIndex": 5,
+      "question": "如果你伸手去_____它，它就会飞走。",
+      "questionPinyin": "Rúguǒ nǐ shēn shǒu qù _____ tā, tā jiù huì fēi zǒu.",
+      "isCorrect": false,
+      "correctAnswer": "抓",
+      "correctAnswerPinyin": "zhuā",
+      "userAnswer": "说",
+      "userAnswerPinyin": "shuō"
+    }
+  ]
+}
