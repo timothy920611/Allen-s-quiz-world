@@ -1,0 +1,65 @@
+{
+  "date": "2026-04-21T07:14:02.803Z",
+  "studentName": "Timothy",
+  "score": 20,
+  "correct": 1,
+  "total": 5,
+  "range": "all",
+  "reviewItems": [
+    {
+      "questionIndex": 1,
+      "question": "真理____人获得自由。",
+      "questionPinyin": "Zhēnlǐ ____ rén huòdé zìyóu.",
+      "isCorrect": true,
+      "correctAnswer": "使",
+      "correctAnswerPinyin": "shǐ",
+      "userAnswer": "使",
+      "userAnswerPinyin": "shǐ",
+      "explain": ""
+    },
+    {
+      "questionIndex": 2,
+      "question": "只有远离恶事、_____的人，才能获得平安。",
+      "questionPinyin": "Zhǐyǒu yuǎnlí èshì, _____ de rén, cáinéng huòdé píng’ān.",
+      "isCorrect": false,
+      "correctAnswer": "行善",
+      "correctAnswerPinyin": "xíngshàn",
+      "userAnswer": "逃跑",
+      "userAnswerPinyin": "táopǎo",
+      "explain": "“行善” means to do good deeds. 中文：和远离恶事搭配，表示做好事。拼音：Hé yuǎnlí èshì dāpèi, biǎoshì zuò hǎoshì."
+    },
+    {
+      "questionIndex": 3,
+      "question": "圣经把这样的人_____成某种状态。",
+      "questionPinyin": "Shèngjīng bǎ zhèyàng de rén _____ chéng mǒu zhǒng zhuàngtài.",
+      "isCorrect": false,
+      "correctAnswer": "描述",
+      "correctAnswerPinyin": "miáoshù",
+      "userAnswer": "改变",
+      "userAnswerPinyin": "gǎibiàn",
+      "explain": "“描述成” fits the pattern “把……描述成……”. 中文：这里是用语言把人说明成某种状态。拼音：Zhèlǐ shì yòng yǔyán bǎ rén shuōmíng chéng mǒu zhǒng zhuàngtài."
+    },
+    {
+      "questionIndex": 4,
+      "question": "“谎言” 指的是哪一种情况？",
+      "questionPinyin": "Huǎngyán zhǐ de shì nǎ yì zhǒng qíngkuàng?",
+      "isCorrect": false,
+      "correctAnswer": "骗人的话",
+      "correctAnswerPinyin": "piànrén de huà",
+      "userAnswer": "重要的事实",
+      "userAnswerPinyin": "zhòngyào de shìshí",
+      "explain": ""
+    },
+    {
+      "questionIndex": 5,
+      "question": "在海水的_____下，海草不断摇动。",
+      "questionPinyin": "Zài hǎishuǐ de _____ xià, hǎicǎo bùduàn yáodòng.",
+      "isCorrect": false,
+      "correctAnswer": "冲刷",
+      "correctAnswerPinyin": "chōngshuā",
+      "userAnswer": "推动",
+      "userAnswerPinyin": "tuīdòng",
+      "explain": "“冲刷” refers to the washing or eroding effect of water. 中文：这里说海水对海草的冲刷作用。拼音：Zhèlǐ shuō hǎishuǐ duì hǎicǎo de chōngshuā zuòyòng."
+    }
+  ]
+}
