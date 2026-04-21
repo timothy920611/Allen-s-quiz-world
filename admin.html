@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老師後台 - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .pinyin { color: #6366f1; font-size: 0.85em; }
+        .fade-in { animation: fadeIn 0.35s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .spinner { border: 3px solid #e2e8f0; border-top-color: #6366f1; border-radius: 50%; width: 28px; height: 28px; animation: spin 0.7s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800">
+
+    <div class="max-w-5xl mx-auto p-4 md:p-8">
+
+        <!-- 頁首 -->
+        <header class="flex items-center justify-between mb-8 flex-wrap gap-4">
+            <div>
+                <h1 class="text-3xl font-black text-indigo-600">📊 老師成績後台</h1>
+                <p class="text-slate-400 text-sm mt-1 pinyin">Admin Dashboard · 讀取 GitHub records/</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="loadRecords()" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-full font-bold text-sm shadow transition-all active:scale-95">
+                    🔄 重新整理
+                </button>
+                <a href="index.html" class="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 px-5 py-2.5 rounded-full font-bold text-sm shadow-sm transition-all">
+                    ← 回首頁
+                </a>
+            </div>
+        </header>
+
+        <!-- 載入中 -->
+        <div id="loadingView" class="flex flex-col items-center justify-center py-24 gap-4">
+            <div class="spinner"></div>
+            <p class="text-slate-400 font-bold text-sm">正在讀取 GitHub 成績資料…</p>
+        </div>
+
+        <!-- 錯誤 -->
+        <div id="errorView" class="hidden text-center py-20">
+            <div class="text-5xl mb-4">⚠️</div>
+            <h2 class="text-xl font-black text-slate-700 mb-2" id="errorMsg">讀取失敗</h2>
+            <p class="text-slate-400 text-sm mb-6">請確認網路連線，或 Token 是否有效。</p>
+            <button onclick="loadRecords()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-full font-bold transition-all">重試</button>
+        </div>
+
+        <!-- 無資料 -->
+        <div id="emptyView" class="hidden text-center py-20">
+            <div class="text-5xl mb-4">📭</div>
+            <h2 class="text-xl font-black text-slate-700 mb-2">目前還沒有學生成績</h2>
+            <p class="text-slate-400 text-sm">學生交卷後，成績會自動出現在這裡。</p>
+        </div>
+
+        <!-- 主要內容 -->
+        <div id="mainView" class="hidden fade-in">
+
+            <!-- 統計卡 -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 text-center">
+                    <div class="text-3xl font-black text-indigo-600" id="statTotal">0</div>
+                    <div class="text-xs text-slate-400 mt-1 font-bold">總份數</div>
+                </div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 text-center">
+                    <div class="text-3xl font-black text-emerald-600" id="statAvg">—</div>
+                    <div class="text-xs text-slate-400 mt-1 font-bold">平均分</div>
+                </div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 text-center">
+                    <div class="text-3xl font-black text-amber-500" id="statHigh">—</div>
+                    <div class="text-xs text-slate-400 mt-1 font-bold">最高分</div>
+                </div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 text-center">
+                    <div class="text-3xl font-black text-rose-500" id="statLow">—</div>
+                    <div class="text-xs text-slate-400 mt-1 font-bold">最低分</div>
+                </div>
+            </div>
+
+            <!-- 排序 + 篩選 -->
+            <div class="flex items-center gap-3 mb-4 flex-wrap">
+                <span class="text-sm font-bold text-slate-500">排序：</span>
+                <button onclick="sortRecords('date')" id="sortDate" class="sort-btn text-xs font-bold px-4 py-1.5 rounded-full border transition-all bg-indigo-600 text-white border-indigo-600">
+                    📅 最新優先
+                </button>
+                <button onclick="sortRecords('score')" id="sortScore" class="sort-btn text-xs font-bold px-4 py-1.5 rounded-full border transition-all bg-white text-slate-500 border-slate-200 hover:border-indigo-300">
+                    🏆 分數高低
+                </button>
+                <button onclick="sortRecords('name')" id="sortName" class="sort-btn text-xs font-bold px-4 py-1.5 rounded-full border transition-all bg-white text-slate-500 border-slate-200 hover:border-indigo-300">
+                    👤 姓名排序
+                </button>
+            </div>
+
+            <!-- 成績列表 -->
+            <div id="recordList" class="space-y-3"></div>
+
+        </div>
+
+        <!-- 考卷詳細 Modal -->
+        <div id="modal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-start justify-center p-4 overflow-y-auto" onclick="closeModal(event)">
+            <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl my-8 p-6 md:p-8 fade-in" onclick="event.stopPropagation()">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-black text-slate-800" id="modalTitle">考卷詳細</h2>
+                        <p class="text-slate-400 text-sm mt-1" id="modalMeta"></p>
+                    </div>
+                    <button onclick="document.getElementById('modal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600 text-2xl font-black">✕</button>
+                </div>
+                <div id="modalBody" class="space-y-4"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const CONFIG = {
+            owner: 'timothy920611',
+            repo: 'Allen-s-quiz-world',
+            vault: "Z2l0aHViX3BhdF8xMUI0TlFKR0EwdlV5ZTB6Wm1jNElhXzVvMGg2VzU2NWlYVUhndFNESkJWajdnT2R2dUE0Z3lSMUQyRzY2cldUNEhWNUEzUVFKSDRuTzA1MTUwSmallChicken",
+            salt: "SmallChicken"
+        };
+
+        let allRecords = [];
+        let sortKey = 'date';
+
+        function getAuthToken() {
+            try {
+                if (!CONFIG.vault || !CONFIG.salt) return null;
+                const hasSaltTail = CONFIG.vault.endsWith(CONFIG.salt);
+                const cleanVault = hasSaltTail ? CONFIG.vault.slice(0, -CONFIG.salt.length) : CONFIG.vault;
+                if (!/^[A-Za-z0-9+/=]+$/.test(cleanVault)) return null;
+                const token = atob(cleanVault).trim();
+                return token.startsWith('github_pat_') ? token : null;
+            } catch { return null; }
+        }
+
+        function githubHeaders(token) {
+            return {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/vnd.github+json',
+                'X-GitHub-Api-Version': '2022-11-28'
+            };
+        }
+
+        async function loadRecords() {
+            show('loadingView');
+            hide('errorView'); hide('emptyView'); hide('mainView');
+
+            const token = getAuthToken();
+            if (!token) return showError("Token 解析失敗，請確認 vault 設定");
+
+            try {
+                // 列出 records/ 資料夾
+                const listUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/records`;
+                const listRes = await fetch(listUrl, { headers: githubHeaders(token), cache: 'no-store' });
+
+                if (listRes.status === 404) {
+                    hide('loadingView');
+                    show('emptyView');
+                    return;
+                }
+                if (!listRes.ok) throw new Error(`GitHub API 錯誤 ${listRes.status}`);
+
+                const files = await listRes.json();
+                const jsonFiles = files.filter(f => f.name.endsWith('.json'));
+
+                if (jsonFiles.length === 0) {
+                    hide('loadingView');
+                    show('emptyView');
+                    return;
+                }
+
+                // 並行讀取所有 JSON
+                const records = await Promise.all(jsonFiles.map(async f => {
+                    try {
+                        const res = await fetch(f.download_url, { cache: 'no-store' });
+                        const data = await res.json();
+                        data._filename = f.name;
+                        data._sha = f.sha;
+                        return data;
+                    } catch { return null; }
+                }));
+
+                allRecords = records.filter(Boolean);
+                hide('loadingView');
+                renderDashboard();
+            } catch (err) {
+                showError(err.message);
+            }
+        }
+
+        function renderDashboard() {
+            if (allRecords.length === 0) { show('emptyView'); return; }
+
+            // 統計
+            const scores = allRecords.map(r => r.score ?? 0);
+            document.getElementById('statTotal').textContent = allRecords.length;
+            document.getElementById('statAvg').textContent = Math.round(scores.reduce((a,b) => a+b, 0) / scores.length);
+            document.getElementById('statHigh').textContent = Math.max(...scores);
+            document.getElementById('statLow').textContent = Math.min(...scores);
+
+            renderList();
+            show('mainView');
+        }
+
+        function sortRecords(key) {
+            sortKey = key;
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.className = "sort-btn text-xs font-bold px-4 py-1.5 rounded-full border transition-all bg-white text-slate-500 border-slate-200 hover:border-indigo-300";
+            });
+            document.getElementById(`sort${key.charAt(0).toUpperCase()+key.slice(1)}`).className =
+                "sort-btn text-xs font-bold px-4 py-1.5 rounded-full border transition-all bg-indigo-600 text-white border-indigo-600";
+            renderList();
+        }
+
+        function renderList() {
+            const sorted = [...allRecords].sort((a, b) => {
+                if (sortKey === 'date') return new Date(b.date) - new Date(a.date);
+                if (sortKey === 'score') return (b.score ?? 0) - (a.score ?? 0);
+                if (sortKey === 'name') return (a.studentName || '').localeCompare(b.studentName || '', 'zh-TW');
+                return 0;
+            });
+
+            document.getElementById('recordList').innerHTML = sorted.map((record, idx) => {
+                const dt = new Date(record.date);
+                const dateText = isNaN(dt.getTime()) ? record.date : dt.toLocaleString('zh-TW', { hour12: false });
+                const score = record.score ?? 0;
+                const scoreColor = score >= 80 ? 'text-emerald-600' : score >= 60 ? 'text-amber-500' : 'text-rose-500';
+                const rangeTxt = record.range === 'all' ? '所有單元' : (record.range || '—');
+                const emoji = score === 100 ? '🏆' : score >= 80 ? '🎉' : score >= 60 ? '👍' : '💪';
+
+                return `
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-5 fade-in flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-4 min-w-0">
+                            <div class="text-3xl shrink-0">${emoji}</div>
+                            <div class="min-w-0">
+                                <p class="font-black text-slate-800 text-base truncate">${record.studentName || '（未填姓名）'}</p>
+                                <p class="text-xs text-slate-400 mt-0.5">${dateText}　範圍：${rangeTxt}</p>
+                                <p class="text-xs text-slate-400">答對 ${record.correct ?? '?'} / ${record.total ?? '?'} 題</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <div class="text-right">
+                                <span class="text-4xl font-black ${scoreColor}">${score}</span>
+                                <span class="text-slate-300 font-bold text-lg"> 分</span>
+                            </div>
+                            ${Array.isArray(record.reviewItems) && record.reviewItems.length > 0
+                                ? `<button onclick='openModal(${idx})' class="text-xs font-bold bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-100 px-3 py-2 rounded-xl transition-all whitespace-nowrap">📋 考卷</button>`
+                                : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // 儲存當前排序順序供 modal 使用
+            window._sortedRecords = sorted;
+        }
+
+        function openModal(idx) {
+            const record = window._sortedRecords[idx];
+            if (!record) return;
+
+            const dt = new Date(record.date);
+            const dateText = isNaN(dt.getTime()) ? record.date : dt.toLocaleString('zh-TW', { hour12: false });
+            const score = record.score ?? 0;
+
+            document.getElementById('modalTitle').textContent = `${record.studentName || '未知'} 的考卷`;
+            document.getElementById('modalMeta').textContent = `${dateText}　${score} 分 (${record.correct}/${record.total})　範圍：${record.range === 'all' ? '所有單元' : record.range}`;
+
+            document.getElementById('modalBody').innerHTML = record.reviewItems.map(item => `
+                <div class="border ${item.isCorrect ? 'border-emerald-200 bg-emerald-50/30' : 'border-rose-200 bg-rose-50/30'} rounded-2xl p-4">
+                    <div class="flex items-start justify-between gap-2 mb-2">
+                        <p class="font-bold text-slate-800 text-sm leading-snug">第 ${item.questionIndex} 題：${item.question}</p>
+                        <span class="shrink-0 text-xs font-bold ${item.isCorrect ? 'text-emerald-600' : 'text-rose-600'}">${item.isCorrect ? '✅' : '❌'}</span>
+                    </div>
+                    ${item.questionPinyin ? `<p class="text-indigo-500 text-xs mb-2">${item.questionPinyin}</p>` : ''}
+                    <p class="text-sm text-slate-600">
+                        作答：<span class="font-bold ${item.isCorrect ? 'text-emerald-600' : 'text-rose-600'}">${item.userAnswer || '（未作答）'}</span>
+                        ${item.userAnswerPinyin ? `<span class="text-indigo-400 text-xs ml-1">${item.userAnswerPinyin}</span>` : ''}
+                    </p>
+                    ${!item.isCorrect ? `
+                    <p class="text-sm text-slate-600 mt-1">
+                        正解：<span class="font-bold text-emerald-600">${item.correctAnswer}</span>
+                        ${item.correctAnswerPinyin ? `<span class="text-indigo-400 text-xs ml-1">${item.correctAnswerPinyin}</span>` : ''}
+                    </p>` : ''}
+                </div>
+            `).join('');
+
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        function closeModal(e) {
+            if (e.target === document.getElementById('modal')) {
+                document.getElementById('modal').classList.add('hidden');
+            }
+        }
+
+        function show(id) { document.getElementById(id).classList.remove('hidden'); }
+        function hide(id) { document.getElementById(id).classList.add('hidden'); }
+
+        function showError(msg) {
+            hide('loadingView');
+            document.getElementById('errorMsg').textContent = msg;
+            show('errorView');
+        }
+
+        loadRecords();
+    </script>
+</body>
+</html>
