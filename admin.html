@@ -285,6 +285,10 @@
                         正解：<span class="font-bold text-emerald-600">${item.correctAnswer}</span>
                         ${item.correctAnswerPinyin ? `<span class="text-indigo-400 text-xs ml-1">${item.correctAnswerPinyin}</span>` : ''}
                     </p>` : ''}
+                    ${item.explain ? `
+                    <p class="text-sm text-slate-600 mt-1">
+                        解釋：<span class="font-bold text-indigo-600">${item.explain}</span>
+                    </p>` : ''}
                 </div>
             `).join('');
 
