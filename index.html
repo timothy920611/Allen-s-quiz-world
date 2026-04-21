@@ -56,7 +56,7 @@
                         <input type="file" id="fileInput" accept=".json" class="block w-full text-sm text-indigo-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-indigo-500 file:text-white hover:file:bg-indigo-400 cursor-pointer bg-indigo-950/50 p-2 rounded-2xl border border-indigo-800">
                     </div>
                     <button onclick="uploadToGithub()" class="w-full bg-indigo-500 hover:bg-indigo-400 text-white py-4 rounded-2xl font-bold text-lg shadow-lg transform transition-all active:scale-95 flex items-center justify-center gap-2">
-                        <span>🚀</span> 立即更新雲端題庫
+                        <span>🚀</span> 上傳新題庫版本
                     </button>
                     <a href="admin.html" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-4 rounded-2xl font-bold text-lg shadow-lg transition-all flex items-center justify-center gap-2 block text-center">
                         <span>📊</span> 查看學生成績後台
@@ -67,7 +67,8 @@
                     <ul class="list-disc list-inside space-y-2 text-xs leading-relaxed text-indigo-300">
                         <li>已移除手動輸入 Token 流程。</li>
                         <li>採用 Base64 混淆字串與專屬 Salt 驗證。</li>
-                        <li>檔案上傳後將自動更新 GitHub 上的 <code class="bg-indigo-900 px-1 rounded">quiz_data.json</code>。</li>
+                        <li>每次上傳會建立一份新檔，不會覆蓋舊題庫。</li>
+                        <li>系統會自動讀取 <code class="bg-indigo-900 px-1 rounded">quiz_data/</code> 裡所有 JSON 題庫。</li>
                     </ul>
                     <div class="mt-4">
                         <p class="font-bold text-indigo-100 text-xs mb-2">📄 JSON 格式範例：</p>
@@ -196,6 +197,7 @@
             owner: 'timothy920611',
             repo: 'Allen-s-quiz-world',
             path: 'quiz_data.json',
+            dataDir: 'quiz_data',
             vault: "Z2l0aHViX3BhdF8xMUI0TlFKR0EwdlV5ZTB6Wm1jNElhXzVvMGg2VzU2NWlYVUhndFNESkJWajdnT2R2dUE0Z3lSMUQyRzY2cldUNEhWNUEzUVFKSDRuTzA1MTUwSmallChicken",
             salt: "SmallChicken"
         };
@@ -237,16 +239,48 @@
 
         // ── 題庫載入 ────────────────────────────────────────────
         async function fetchQuizData() {
-            const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}`;
             try {
-                const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github.v3.raw' }, cache: 'no-store' });
-                if (!res.ok) throw new Error();
-                questionBank = await res.json();
+                questionBank = await fetchAllQuizData();
+                if (!Array.isArray(questionBank) || questionBank.length === 0) throw new Error();
                 updateDateDropdown();
                 document.getElementById('startBtn').disabled = false;
             } catch {
                 showStatus("雲端題庫連線失敗，請檢查網路或切換老師模式上傳", "error");
             }
+        }
+
+        async function fetchAllQuizData() {
+            const rawHeader = { 'Accept': 'application/vnd.github.v3.raw' };
+            const legacyUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}`;
+            const dirUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.dataDir}`;
+            const datasets = [];
+
+            try {
+                const legacyRes = await fetch(legacyUrl, { headers: rawHeader, cache: 'no-store' });
+                if (legacyRes.ok) {
+                    const legacyData = await legacyRes.json();
+                    if (Array.isArray(legacyData)) datasets.push(legacyData);
+                }
+            } catch {}
+
+            try {
+                const token = getAuthToken();
+                const dirRes = await fetch(dirUrl, { headers: token ? githubHeaders(token) : undefined, cache: 'no-store' });
+                if (dirRes.ok) {
+                    const files = await dirRes.json();
+                    const jsonFiles = files.filter(f => f.type === 'file' && f.name.endsWith('.json'));
+                    const loaded = await Promise.all(jsonFiles.map(async (f) => {
+                        try {
+                            const res = await fetch(f.download_url, { cache: 'no-store' });
+                            const data = await res.json();
+                            return Array.isArray(data) ? data : [];
+                        } catch { return []; }
+                    }));
+                    datasets.push(...loaded);
+                }
+            } catch {}
+
+            return datasets.flat().filter(item => item && typeof item === 'object');
         }
 
         function updateDateDropdown() {
@@ -276,23 +310,26 @@
             reader.onload = async (e) => {
                 try {
                     const content = e.target.result;
-                    JSON.parse(content);
-                    showStatus("正在安全上傳至 GitHub...", "info");
-                    const apiUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${CONFIG.path}`;
-                    let sha = '';
-                    const res = await fetch(apiUrl, { headers: githubHeaders(token) });
-                    if (res.ok) sha = (await res.json()).sha;
+                    const parsed = JSON.parse(content);
+                    if (!Array.isArray(parsed) || parsed.length === 0) throw new Error("JSON 必須是非空陣列");
+
+                    showStatus("正在上傳新題庫版本至 GitHub...", "info");
+                    const now = new Date();
+                    const pad = n => String(n).padStart(2, '0');
+                    const datePart = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+                    const timePart = `${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+                    const apiPath = `${CONFIG.dataDir}/${datePart}_${timePart}.json`;
+                    const apiUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${apiPath}`;
                     const putRes = await fetch(apiUrl, {
                         method: 'PUT',
                         headers: githubHeaders(token, true),
                         body: JSON.stringify({
-                            message: `Auto-Update: ${new Date().toLocaleString()}`,
+                            message: `Add quiz dataset: ${apiPath}`,
                             content: btoa(unescape(encodeURIComponent(content))),
-                            sha: sha || undefined
                         })
                     });
                     if (putRes.ok) {
-                        showStatus("✅ 雲端同步完成！網頁將在 2 秒後刷新", "success");
+                        showStatus("✅ 新題庫版本已上傳！舊資料保留，網頁將在 2 秒後刷新", "success");
                         setTimeout(() => location.reload(), 2000);
                     } else {
                         const err = await putRes.json();
