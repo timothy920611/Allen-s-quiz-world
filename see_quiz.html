@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>考卷檢視 - Quiz Review</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .pinyin { color: #6366f1; font-size: 0.85em; font-weight: normal; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; }
+            .print-card { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <div class="max-w-3xl mx-auto p-4 md:p-8">
+
+        <!-- 頂部導覽 -->
+        <div class="no-print flex items-center justify-between mb-6 gap-4">
+            <a href="index.html" class="flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-800 bg-white border border-indigo-100 px-4 py-2 rounded-full shadow-sm transition-all">
+                ← 返回首頁
+            </a>
+            <button onclick="window.print()" class="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-slate-800 bg-white border border-slate-200 px-4 py-2 rounded-full shadow-sm transition-all">
+                🖨️ 列印考卷
+            </button>
+        </div>
+
+        <!-- 錯誤畫面 -->
+        <div id="errorView" class="hidden text-center py-20">
+            <div class="text-6xl mb-4">😢</div>
+            <h2 class="text-2xl font-black text-slate-700 mb-2">找不到這份考卷</h2>
+            <p class="text-slate-500 mb-6">紀錄可能已被清除，或連結已失效。</p>
+            <a href="index.html" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-full font-bold transition-all">
+                回首頁
+            </a>
+        </div>
+
+        <!-- 考卷主體 -->
+        <div id="quizView" class="hidden fade-in">
+
+            <!-- 標題卡 -->
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 md:p-8 mb-6 text-center">
+                <div class="text-5xl mb-3" id="headerEmoji">📋</div>
+                <h1 class="text-3xl font-black text-slate-800 mb-1">考卷紀錄</h1>
+                <p class="text-indigo-500 pinyin text-base">Kǎojuàn jìlù · Quiz Review</p>
+
+                <div class="mt-6 grid grid-cols-3 gap-4 text-center">
+                    <div class="bg-indigo-50 rounded-2xl p-4">
+                        <div class="text-3xl font-black text-indigo-600" id="scoreVal">—</div>
+                        <div class="text-xs text-slate-500 mt-1 font-bold">分數</div>
+                    </div>
+                    <div class="bg-emerald-50 rounded-2xl p-4">
+                        <div class="text-3xl font-black text-emerald-600" id="correctVal">—</div>
+                        <div class="text-xs text-slate-500 mt-1 font-bold">答對</div>
+                    </div>
+                    <div class="bg-slate-100 rounded-2xl p-4">
+                        <div class="text-3xl font-black text-slate-600" id="totalVal">—</div>
+                        <div class="text-xs text-slate-500 mt-1 font-bold">總題數</div>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex flex-wrap justify-center gap-3 text-xs text-slate-500">
+                    <span>📅 <span id="dateVal">—</span></span>
+                    <span>📚 <span id="rangeVal">—</span></span>
+                </div>
+            </div>
+
+            <!-- 各題卡片 -->
+            <div id="itemList" class="space-y-4"></div>
+
+            <!-- 底部按鈕 -->
+            <div class="no-print mt-8 text-center">
+                <a href="index.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-4 rounded-full font-black text-lg shadow-lg transition-all">
+                    返回首頁 🏠
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const QUIZ_HISTORY_KEY = 'allen_quiz_history_v1';
+
+        function getHistory() {
+            try {
+                const raw = localStorage.getItem(QUIZ_HISTORY_KEY);
+                const parsed = raw ? JSON.parse(raw) : [];
+                return Array.isArray(parsed) ? parsed : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function init() {
+            const params = new URLSearchParams(location.search);
+            const idx = parseInt(params.get('idx'), 10);
+            const history = getHistory();
+
+            if (isNaN(idx) || idx < 0 || idx >= history.length) {
+                document.getElementById('errorView').classList.remove('hidden');
+                return;
+            }
+
+            const record = history[idx];
+            const items = record.reviewItems;
+
+            if (!Array.isArray(items) || items.length === 0) {
+                document.getElementById('errorView').classList.remove('hidden');
+                return;
+            }
+
+            // 填入標題卡資訊
+            const score = record.score ?? 0;
+            const emoji = score === 100 ? '🏆' : score >= 80 ? '🎉' : score >= 60 ? '👍' : '💪';
+            document.getElementById('headerEmoji').textContent = emoji;
+            document.getElementById('scoreVal').textContent = score;
+            document.getElementById('correctVal').textContent = record.correct ?? '—';
+            document.getElementById('totalVal').textContent = record.total ?? items.length;
+
+            const dt = new Date(record.date);
+            document.getElementById('dateVal').textContent = isNaN(dt.getTime())
+                ? record.date
+                : dt.toLocaleString('zh-TW', { hour12: false });
+            document.getElementById('rangeVal').textContent =
+                record.range === 'all' ? '所有單元' : (record.range || '—');
+
+            // 渲染每一題
+            const list = document.getElementById('itemList');
+            list.innerHTML = items.map((item, i) => {
+                const correct = item.isCorrect;
+                const borderColor = correct ? 'border-emerald-200' : 'border-rose-200';
+                const badgeBg = correct ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-600';
+                const badgeText = correct ? '✅ 答對' : '❌ 答錯';
+                const correctColor = 'text-emerald-600';
+                const userColor = correct ? 'text-emerald-600' : 'text-rose-600';
+
+                return `
+                    <div class="print-card bg-white border ${borderColor} rounded-2xl p-5 md:p-6 fade-in">
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div class="flex-1">
+                                <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest">Question ${item.questionIndex ?? (i + 1)}</span>
+                                <h3 class="text-xl font-black text-slate-800 mt-1 leading-snug">${item.question ?? ''}</h3>
+                                ${item.questionPinyin ? `<div class="pinyin mt-1">${item.questionPinyin}</div>` : ''}
+                            </div>
+                            <span class="shrink-0 text-xs font-bold px-3 py-1 rounded-full ${badgeBg}">${badgeText}</span>
+                        </div>
+
+                        <div class="border-t border-slate-100 pt-3 space-y-2 text-sm">
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-slate-400 font-bold shrink-0">你的答案</span>
+                                <span class="font-bold ${userColor}">${item.userAnswer ?? '（未作答）'}</span>
+                                ${item.userAnswerPinyin ? `<span class="pinyin">${item.userAnswerPinyin}</span>` : ''}
+                            </div>
+                            ${!correct ? `
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-slate-400 font-bold shrink-0">正確答案</span>
+                                <span class="font-bold ${correctColor}">${item.correctAnswer ?? '—'}</span>
+                                ${item.correctAnswerPinyin ? `<span class="pinyin">${item.correctAnswerPinyin}</span>` : ''}
+                            </div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('quizView').classList.remove('hidden');
+            document.title = `考卷紀錄 #${history.length - idx} · ${score} 分`;
+        }
+
+        init();
+    </script>
+</body>
+</html>
