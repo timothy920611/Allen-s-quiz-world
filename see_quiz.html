@@ -164,7 +164,12 @@
                                 <span class="text-slate-400 font-bold shrink-0">正確答案</span>
                                 <span class="font-bold ${correctColor}">${item.correctAnswer ?? '—'}</span>
                                 ${item.correctAnswerPinyin ? `<span class="pinyin">${item.correctAnswerPinyin}</span>` : ''}
-                            </div>` : ''}
+                            </div>
+                            ${item.explain ? `
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-slate-400 font-bold shrink-0">解釋</span>
+                                <span class="font-bold text-indigo-600">${item.explain}</span>
+                            </div>` : ''}` : ''}
                         </div>
                     </div>
                 `;
