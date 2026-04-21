@@ -492,7 +492,8 @@
                 score,
                 correct,
                 total,
-                range: selectedRange || 'all'
+                range: selectedRange || 'all',
+                reviewItems
             });
             renderQuizHistory();
             
@@ -576,11 +577,17 @@
                     ? item.date
                     : dt.toLocaleString('zh-TW', { hour12: false });
                 const rangeText = item.range === 'all' ? '所有單元' : item.range;
+                const hasDetail = Array.isArray(item.reviewItems) && item.reviewItems.length > 0;
                 return `
                     <div class="bg-white border border-slate-200 rounded-2xl p-3">
-                        <p class="font-bold text-slate-700">#${history.length - idx}｜${item.score} 分 (${item.correct}/${item.total})</p>
-                        <p class="text-xs text-slate-500">日期：${dateText}</p>
-                        <p class="text-xs text-slate-500">範圍：${rangeText}</p>
+                        <div class="flex items-center justify-between gap-2">
+                            <div>
+                                <p class="font-bold text-slate-700">#${history.length - idx}｜${item.score} 分 (${item.correct}/${item.total})</p>
+                                <p class="text-xs text-slate-500">日期：${dateText}</p>
+                                <p class="text-xs text-slate-500">範圍：${rangeText}</p>
+                            </div>
+                            ${hasDetail ? `<a href="see_quiz.html?idx=${idx}" target="_blank" class="shrink-0 text-xs font-bold bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-100 px-3 py-2 rounded-xl transition-all whitespace-nowrap">📋 查看考卷</a>` : ''}
+                        </div>
                     </div>
                 `;
             }).join('');
