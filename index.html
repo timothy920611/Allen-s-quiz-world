@@ -359,7 +359,7 @@
             userAnswers = {};
             pool = [...pool].sort(() => Math.random() - 0.5);
             const num = countVal === 'all' ? pool.length : Math.min(parseInt(countVal), pool.length);
-            currentQuiz = pool.slice(0, num);
+            currentQuiz = pool.slice(0, num).map(shuffleQuestionOptions);
 
             renderQuiz();
             document.getElementById('section-settings').classList.add('hidden-section');
@@ -436,6 +436,43 @@
             if (Array.isArray(q.answer)) candidates.push(...q.answer);
             if (Array.isArray(q.multi_answers)) candidates.push(...q.multi_answers);
             return [...new Set(candidates.filter(i => Number.isInteger(i) && i >= 0 && i < q.options.length))];
+        }
+
+        function shuffleQuestionOptions(question) {
+            if (!question || !Array.isArray(question.options) || question.options.length <= 1) {
+                return question;
+            }
+
+            const optionIndexes = question.options.map((_, idx) => idx);
+            optionIndexes.sort(() => Math.random() - 0.5);
+
+            const oldToNewIndex = {};
+            optionIndexes.forEach((oldIdx, newIdx) => {
+                oldToNewIndex[oldIdx] = newIdx;
+            });
+
+            const shuffledQuestion = { ...question };
+            shuffledQuestion.options = optionIndexes.map(i => question.options[i]);
+
+            if (Array.isArray(question.options_pinyin)) {
+                shuffledQuestion.options_pinyin = optionIndexes.map(i => question.options_pinyin[i] || '');
+            }
+
+            if (Number.isInteger(question.answer)) {
+                shuffledQuestion.answer = oldToNewIndex[question.answer];
+            } else if (Array.isArray(question.answer)) {
+                shuffledQuestion.answer = question.answer
+                    .filter(i => Number.isInteger(i) && oldToNewIndex[i] !== undefined)
+                    .map(i => oldToNewIndex[i]);
+            }
+
+            if (Array.isArray(question.multi_answers)) {
+                shuffledQuestion.multi_answers = question.multi_answers
+                    .filter(i => Number.isInteger(i) && oldToNewIndex[i] !== undefined)
+                    .map(i => oldToNewIndex[i]);
+            }
+
+            return shuffledQuestion;
         }
 
         // ── 交卷 ────────────────────────────────────────────────
