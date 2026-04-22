@@ -1,0 +1,65 @@
+{
+  "date": "2026-04-22T14:23:13.549Z",
+  "studentName": "Allen",
+  "score": 80,
+  "correct": 4,
+  "total": 5,
+  "range": "all",
+  "reviewItems": [
+    {
+      "questionIndex": 1,
+      "question": "如果你伸手去_____它，它就会飞走。",
+      "questionPinyin": "Rúguǒ nǐ shēn shǒu qù _____ tā, tā jiù huì fēi zǒu.",
+      "isCorrect": true,
+      "correctAnswer": "抓",
+      "correctAnswerPinyin": "zhuā",
+      "userAnswer": "抓",
+      "userAnswerPinyin": "zhuā",
+      "explain": "“抓” fits the action of using your hand to catch something. 中文：伸手去做抓的动作。拼音：Shēnshǒu qù zuò zhuā de dòngzuò."
+    },
+    {
+      "questionIndex": 2,
+      "question": "“复活” 的意思是？",
+      "questionPinyin": "Fùhuó de yìsi shì?",
+      "isCorrect": true,
+      "correctAnswer": "重新活过来",
+      "correctAnswerPinyin": "chóngxīn huó guòlái",
+      "userAnswer": "重新活过来",
+      "userAnswerPinyin": "chóngxīn huó guòlái",
+      "explain": ""
+    },
+    {
+      "questionIndex": 3,
+      "question": "她一边听音乐，一边_____作业。",
+      "questionPinyin": "Tā yìbiān tīng yīnyuè, yìbiān _____ zuòyè.",
+      "isCorrect": true,
+      "correctAnswer": "写",
+      "correctAnswerPinyin": "xiě",
+      "userAnswer": "写",
+      "userAnswerPinyin": "xiě",
+      "explain": "English: The correct answer is 写 (xiě). “一边…一边…” shows two actions at the same time. 简单中文：她一边听音乐，一边写作业。 Pinyin: tā yìbiān tīng yīnyuè, yìbiān xiě zuòyè."
+    },
+    {
+      "questionIndex": 4,
+      "question": "他们总是感到_____。",
+      "questionPinyin": "Tāmen zǒng shì gǎndào _____.",
+      "isCorrect": false,
+      "correctAnswer": "不安",
+      "correctAnswerPinyin": "bù’ān",
+      "userAnswer": "开心",
+      "userAnswerPinyin": "kāixīn",
+      "explain": "“不安” means uneasy or anxious. 中文：表示心里不平静。拼音：Biǎoshì xīnlǐ bù píngjìng."
+    },
+    {
+      "questionIndex": 5,
+      "question": "Which is the meaning of “Freedom”?",
+      "questionPinyin": "",
+      "isCorrect": true,
+      "correctAnswer": "自由",
+      "correctAnswerPinyin": "zìyóu",
+      "userAnswer": "自由",
+      "userAnswerPinyin": "zìyóu",
+      "explain": ""
+    }
+  ]
+}
