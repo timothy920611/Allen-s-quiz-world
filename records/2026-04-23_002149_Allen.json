@@ -1,0 +1,65 @@
+{
+  "date": "2026-04-22T14:21:49.182Z",
+  "studentName": "Allen",
+  "score": 100,
+  "correct": 5,
+  "total": 5,
+  "range": "all",
+  "reviewItems": [
+    {
+      "questionIndex": 1,
+      "question": "以下哪些属于负面概念？",
+      "questionPinyin": "Yǐxià nǎxiē shǔyú fùmiàn gàiniàn?",
+      "isCorrect": true,
+      "correctAnswer": "恐惧 / 谎言",
+      "correctAnswerPinyin": "kǒngjù / huǎngyán",
+      "userAnswer": "谎言",
+      "userAnswerPinyin": "huǎngyán",
+      "explain": ""
+    },
+    {
+      "questionIndex": 2,
+      "question": "当一个人感到害怕、紧张时，这种情绪叫做什么？",
+      "questionPinyin": "Dāng yí gè rén gǎndào hàipà, jǐnzhāng shí, zhè zhǒng qíngxù jiàozuò shénme?",
+      "isCorrect": true,
+      "correctAnswer": "恐惧",
+      "correctAnswerPinyin": "kǒngjù",
+      "userAnswer": "恐惧",
+      "userAnswerPinyin": "kǒngjù",
+      "explain": ""
+    },
+    {
+      "questionIndex": 3,
+      "question": "“平安”的英文是？",
+      "questionPinyin": "Píng'ān de yīngwén shì?",
+      "isCorrect": true,
+      "correctAnswer": "Safe",
+      "correctAnswerPinyin": "",
+      "userAnswer": "Safe",
+      "userAnswerPinyin": "",
+      "explain": "English: The correct answer is Safe. 简单中文：平安的英文可以是 safe。 Pinyin: píng'ān de yīngwén kěyǐ shì safe."
+    },
+    {
+      "questionIndex": 4,
+      "question": "“复活” 的意思是？",
+      "questionPinyin": "Fùhuó de yìsi shì?",
+      "isCorrect": true,
+      "correctAnswer": "重新活过来",
+      "correctAnswerPinyin": "chóngxīn huó guòlái",
+      "userAnswer": "重新活过来",
+      "userAnswerPinyin": "chóngxīn huó guòlái",
+      "explain": ""
+    },
+    {
+      "questionIndex": 5,
+      "question": "如果你现在出发，应该还_____赶上火车。",
+      "questionPinyin": "Rúguǒ nǐ xiànzài chūfā, yīnggāi hái _____ gǎnshàng huǒchē.",
+      "isCorrect": true,
+      "correctAnswer": "能",
+      "correctAnswerPinyin": "néng",
+      "userAnswer": "能",
+      "userAnswerPinyin": "néng",
+      "explain": "English: The correct answer is 能 (néng). It shows possibility or ability. 简单中文：如果现在出发，应该还能赶上火车。 Pinyin: rúguǒ xiànzài chūfā, yīnggāi hái néng gǎnshàng huǒchē."
+    }
+  ]
+}
