@@ -1,0 +1,120 @@
+{
+  "date": "2026-04-26T03:36:46.522Z",
+  "studentName": "Allen",
+  "score": 100,
+  "correct": 10,
+  "total": 10,
+  "range": "all",
+  "reviewItems": [
+    {
+      "questionIndex": 1,
+      "question": "这首歌____我想起小时候的事情。",
+      "questionPinyin": "Zhè shǒu gē ____ wǒ xiǎngqǐ xiǎoshíhòu de shìqíng.",
+      "isCorrect": true,
+      "correctAnswer": "使",
+      "correctAnswerPinyin": "shǐ",
+      "userAnswer": "使",
+      "userAnswerPinyin": "shǐ",
+      "explain": ""
+    },
+    {
+      "questionIndex": 2,
+      "question": "“勇敢”的英文是？",
+      "questionPinyin": "Yǒnggǎn de yīngwén shì?",
+      "isCorrect": true,
+      "correctAnswer": "Brave",
+      "correctAnswerPinyin": "",
+      "userAnswer": "Brave",
+      "userAnswerPinyin": "",
+      "explain": "English: The correct answer is Brave. 简单中文：勇敢 = Brave。 Pinyin: yǒnggǎn de yīngwén shì Brave."
+    },
+    {
+      "questionIndex": 3,
+      "question": "他们按照自己的_____来理解。",
+      "questionPinyin": "Tāmen ànzhào zìjǐ de _____ lái lǐjiě.",
+      "isCorrect": true,
+      "correctAnswer": "标准",
+      "correctAnswerPinyin": "biāozhǔn",
+      "userAnswer": "标准",
+      "userAnswerPinyin": "biāozhǔn",
+      "explain": "“标准” means a standard or criterion. 中文：按照自己的判断依据来理解。拼音：Ànzhào zìjǐ de pànduàn yījù lái lǐjiě."
+    },
+    {
+      "questionIndex": 4,
+      "question": "以下哪些属于正面概念？",
+      "questionPinyin": "Yǐxià nǎxiē shǔyú zhèngmiàn gàiniàn?",
+      "isCorrect": true,
+      "correctAnswer": "自由 / 真理",
+      "correctAnswerPinyin": "zìyóu / zhēnlǐ",
+      "userAnswer": "真理",
+      "userAnswerPinyin": "zhēnlǐ",
+      "explain": ""
+    },
+    {
+      "questionIndex": 5,
+      "question": "我们不应该_____蝴蝶。",
+      "questionPinyin": "Wǒmen bù yīnggāi _____ húdié.",
+      "isCorrect": true,
+      "correctAnswer": "追逐",
+      "correctAnswerPinyin": "zhuīzhú",
+      "userAnswer": "追逐",
+      "userAnswerPinyin": "zhuīzhú",
+      "explain": "“追逐” means to chase, which fits butterflies. 中文：这里表示追赶蝴蝶。拼音：Zhèlǐ biǎoshì zhuīgǎn húdié."
+    },
+    {
+      "questionIndex": 6,
+      "question": "虽然天气不好，他_____完成了比赛。",
+      "questionPinyin": "Suīrán tiānqì bù hǎo, tā _____ wánchéng le bǐsài.",
+      "isCorrect": true,
+      "correctAnswer": "仍然",
+      "correctAnswerPinyin": "réngrán",
+      "userAnswer": "仍然",
+      "userAnswerPinyin": "réngrán",
+      "explain": "English: The correct answer is 仍然 (réngrán). It shows the second action happened despite the first condition. 简单中文：天气不好，他还是完成了比赛。 Pinyin: tiānqì bù hǎo, tā réngrán wánchéng le bǐsài."
+    },
+    {
+      "questionIndex": 7,
+      "question": "“复活” 的意思是？",
+      "questionPinyin": "Fùhuó de yìsi shì?",
+      "isCorrect": true,
+      "correctAnswer": "重新活过来",
+      "correctAnswerPinyin": "chóngxīn huó guòlái",
+      "userAnswer": "重新活过来",
+      "userAnswerPinyin": "chóngxīn huó guòlái",
+      "explain": ""
+    },
+    {
+      "questionIndex": 8,
+      "question": "他努力学习，希望_____过去失败的影响。",
+      "questionPinyin": "Tā nǔlì xuéxí, xīwàng _____ guòqù shībài de yǐngxiǎng.",
+      "isCorrect": true,
+      "correctAnswer": "摆脱",
+      "correctAnswerPinyin": "bǎituō",
+      "userAnswer": "摆脱",
+      "userAnswerPinyin": "bǎituō",
+      "explain": "English: The correct answer is 摆脱 (bǎituō). It means to get rid of or escape from something. 简单中文：这里是“摆脱过去失败的影响”。 Pinyin: zhèlǐ shì “bǎituō guòqù shībài de yǐngxiǎng”."
+    },
+    {
+      "questionIndex": 9,
+      "question": "他努力学习，希望_____过去失败的影响。",
+      "questionPinyin": "Tā nǔlì xuéxí, xīwàng _____ guòqù shībài de yǐngxiǎng.",
+      "isCorrect": true,
+      "correctAnswer": "摆脱",
+      "correctAnswerPinyin": "bǎituō",
+      "userAnswer": "摆脱",
+      "userAnswerPinyin": "bǎituō",
+      "explain": ""
+    },
+    {
+      "questionIndex": 10,
+      "question": "虽然天气不好，他_____完成了比赛。",
+      "questionPinyin": "Suīrán tiānqì bù hǎo, tā _____ wánchéng le bǐsài.",
+      "isCorrect": true,
+      "correctAnswer": "仍然",
+      "correctAnswerPinyin": "réngrán",
+      "userAnswer": "仍然",
+      "userAnswerPinyin": "réngrán",
+      "explain": ""
+    }
+  ]
+}
