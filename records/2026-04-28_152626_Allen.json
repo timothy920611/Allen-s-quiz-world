@@ -1,0 +1,120 @@
+{
+  "date": "2026-04-28T05:26:26.169Z",
+  "studentName": "Allen",
+  "score": 90,
+  "correct": 9,
+  "total": 10,
+  "range": "all",
+  "reviewItems": [
+    {
+      "questionIndex": 1,
+      "question": "以下哪些属于负面概念？",
+      "questionPinyin": "Yǐxià nǎxiē shǔyú fùmiàn gàiniàn?",
+      "isCorrect": true,
+      "correctAnswer": "恐惧 / 谎言",
+      "correctAnswerPinyin": "kǒngjù / huǎngyán",
+      "userAnswer": "恐惧",
+      "userAnswerPinyin": "kǒngjù",
+      "explain": ""
+    },
+    {
+      "questionIndex": 2,
+      "question": "Which is the meaning of “Freedom”?",
+      "questionPinyin": "",
+      "isCorrect": true,
+      "correctAnswer": "自由",
+      "correctAnswerPinyin": "zìyóu",
+      "userAnswer": "自由",
+      "userAnswerPinyin": "zìyóu",
+      "explain": "English: The correct answer is 自由 (zìyóu). Freedom means being free. 简单中文：Freedom 就是自由。 Pinyin: Freedom jiù shì zìyóu."
+    },
+    {
+      "questionIndex": 3,
+      "question": "“童年” 指的是哪一个阶段？",
+      "questionPinyin": "Tóngnián zhǐ de shì nǎ yí gè jiēduàn?",
+      "isCorrect": true,
+      "correctAnswer": "小时候",
+      "correctAnswerPinyin": "xiǎoshíhòu",
+      "userAnswer": "小时候",
+      "userAnswerPinyin": "xiǎoshíhòu",
+      "explain": ""
+    },
+    {
+      "questionIndex": 4,
+      "question": "人人都渴望_____。",
+      "questionPinyin": "Rénrén dōu kěwàng _____.",
+      "isCorrect": true,
+      "correctAnswer": "幸福",
+      "correctAnswerPinyin": "xìngfú",
+      "userAnswer": "幸福",
+      "userAnswerPinyin": "xìngfú",
+      "explain": "Everyone wants happiness. 中文：人人都会渴望幸福。拼音：Rénrén dōu huì kěwàng xìngfú."
+    },
+    {
+      "questionIndex": 5,
+      "question": "“真理”的英文是？",
+      "questionPinyin": "Zhēnlǐ de yīngwén shì?",
+      "isCorrect": true,
+      "correctAnswer": "Truth",
+      "correctAnswerPinyin": "",
+      "userAnswer": "Truth",
+      "userAnswerPinyin": "",
+      "explain": "English: The correct answer is Truth. 简单中文：真理 = Truth。 Pinyin: zhēnlǐ de yīngwén shì Truth."
+    },
+    {
+      "questionIndex": 6,
+      "question": "我____去过北京，但是我很想去。",
+      "questionPinyin": "Wǒ ____ qùguo Běijīng, dànshì wǒ hěn xiǎng qù.",
+      "isCorrect": true,
+      "correctAnswer": "没有",
+      "correctAnswerPinyin": "méiyǒu",
+      "userAnswer": "没有",
+      "userAnswerPinyin": "méiyǒu",
+      "explain": "English: The correct answer is 没有 (méiyǒu). This sentence uses the pattern “没有去过”. 简单中文：我没有去过北京。 Pinyin: wǒ méiyǒu qù guò Běijīng."
+    },
+    {
+      "questionIndex": 7,
+      "question": "虽然天气不好，他_____完成了比赛。",
+      "questionPinyin": "Suīrán tiānqì bù hǎo, tā _____ wánchéng le bǐsài.",
+      "isCorrect": true,
+      "correctAnswer": "仍然",
+      "correctAnswerPinyin": "réngrán",
+      "userAnswer": "仍然",
+      "userAnswerPinyin": "réngrán",
+      "explain": ""
+    },
+    {
+      "questionIndex": 8,
+      "question": "只有远离恶事、_____的人，才能获得平安。",
+      "questionPinyin": "Zhǐyǒu yuǎnlí èshì, _____ de rén, cáinéng huòdé píng’ān.",
+      "isCorrect": false,
+      "correctAnswer": "行善",
+      "correctAnswerPinyin": "xíngshàn",
+      "userAnswer": "逃跑",
+      "userAnswerPinyin": "táopǎo",
+      "explain": "“行善” means to do good deeds. 中文：和远离恶事搭配，表示做好事。拼音：Hé yuǎnlí èshì dāpèi, biǎoshì zuò hǎoshì."
+    },
+    {
+      "questionIndex": 9,
+      "question": "圣经把这样的人_____成某种状态。",
+      "questionPinyin": "Shèngjīng bǎ zhèyàng de rén _____ chéng mǒu zhǒng zhuàngtài.",
+      "isCorrect": true,
+      "correctAnswer": "描述",
+      "correctAnswerPinyin": "miáoshù",
+      "userAnswer": "描述",
+      "userAnswerPinyin": "miáoshù",
+      "explain": "“描述成” fits the pattern “把……描述成……”. 中文：这里是用语言把人说明成某种状态。拼音：Zhèlǐ shì yòng yǔyán bǎ rén shuōmíng chéng mǒu zhǒng zhuàngtài."
+    },
+    {
+      "questionIndex": 10,
+      "question": "虽然他很累，还是坚持把工作_____。",
+      "questionPinyin": "Suīrán tā hěn lèi, háishi jiānchí bǎ gōngzuò _____.",
+      "isCorrect": true,
+      "correctAnswer": "做完",
+      "correctAnswerPinyin": "zuòwán",
+      "userAnswer": "做完",
+      "userAnswerPinyin": "zuòwán",
+      "explain": "English: The correct answer is 做完 (zuòwán). It means to finish doing something completely. 简单中文：工作做完了。 Pinyin: gōngzuò zuòwán le."
+    }
+  ]
+}
