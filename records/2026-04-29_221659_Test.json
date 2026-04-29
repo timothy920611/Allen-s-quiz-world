@@ -1,0 +1,70 @@
+{
+  "date": "2026-04-29T14:16:59.611Z",
+  "studentName": "Test",
+  "score": 40,
+  "correct": 2,
+  "total": 5,
+  "range": "2026-04-20",
+  "reviewItems": [
+    {
+      "questionIndex": 1,
+      "question": "因为坏人很多，所以他们总是感到_____。",
+      "questionPinyin": "Yīnwèi huàirén hěnduō, suǒyǐ tāmen zǒng shì gǎndào _____.",
+      "questionEn": "Because there are many wicked people, they always feel _____.",
+      "isCorrect": true,
+      "correctAnswer": "不安",
+      "correctAnswerPinyin": "bù ān",
+      "userAnswer": "不安",
+      "userAnswerPinyin": "bù ān",
+      "explain": "中文：正确答案是不安，表示因为环境不好而感到担心、不平静。拼音：Zhōngwén: Zhèngquè dá'àn shì bù ān, biǎoshì yīnwèi huánjìng bù hǎo ér gǎndào dānxīn, bù píngjìng. English: The correct answer is uneasy. It means feeling worried and unsettled because of a bad environment."
+    },
+    {
+      "questionIndex": 2,
+      "question": "人人都渴望_____。",
+      "questionPinyin": "Rénrén dōu kěwàng _____.",
+      "questionEn": "Everyone longs for _____.",
+      "isCorrect": true,
+      "correctAnswer": "幸福",
+      "correctAnswerPinyin": "xìngfú",
+      "userAnswer": "幸福",
+      "userAnswerPinyin": "xìngfú",
+      "explain": "中文：正确答案是幸福，句子表示每个人都希望得到幸福。拼音：Zhōngwén: Zhèngquè dá'àn shì xìngfú, jùzi biǎoshì měi gèrén dōu xīwàng dédào xìngfú. English: The correct answer is happiness. The sentence means everyone hopes to gain happiness."
+    },
+    {
+      "questionIndex": 3,
+      "question": "如果你伸手去_____它，它就会飞走。",
+      "questionPinyin": "Rúguǒ nǐ shēnshǒu qù _____ tā, tā jiù huì fēi zǒu.",
+      "questionEn": "If you reach out to _____ it, it will fly away.",
+      "isCorrect": false,
+      "correctAnswer": "抓",
+      "correctAnswerPinyin": "zhuā",
+      "userAnswer": "听",
+      "userAnswerPinyin": "tīng",
+      "explain": "中文：正确答案是抓，表示想用手抓住它。拼音：Zhōngwén: Zhèngquè dá'àn shì zhuā, biǎoshì xiǎng yòng shǒu zhuāzhù tā. English: The correct answer is catch. It means trying to catch it with your hand."
+    },
+    {
+      "questionIndex": 4,
+      "question": "小王下午做什么？",
+      "questionPinyin": "Xiǎo Wáng xiàwǔ zuò shénme?",
+      "questionEn": "What did Xiao Wang do in the afternoon?",
+      "isCorrect": false,
+      "correctAnswer": "打网球",
+      "correctAnswerPinyin": "dǎ wǎngqiú",
+      "userAnswer": "喝咖啡",
+      "userAnswerPinyin": "hē kāfēi",
+      "explain": "中文：正确答案是打网球，短文说他下午去打网球。拼音：Zhōngwén: Zhèngquè dá'àn shì dǎ wǎngqiú, duǎnwén shuō tā xiàwǔ qù dǎ wǎngqiú. English: The correct answer is play tennis. The passage says he played tennis in the afternoon."
+    },
+    {
+      "questionIndex": 5,
+      "question": "他们按照自己的_____来理解事情。",
+      "questionPinyin": "Tāmen ànzhào zìjǐ de _____ lái lǐjiě shìqíng.",
+      "questionEn": "They understand things according to their own _____.",
+      "isCorrect": false,
+      "correctAnswer": "标准",
+      "correctAnswerPinyin": "biāozhǔn",
+      "userAnswer": "朋友",
+      "userAnswerPinyin": "péngyǒu",
+      "explain": "中文：正确答案是标准，表示用自己的判断依据看事情。拼音：Zhōngwén: Zhèngquè dá'àn shì biāozhǔn, biǎoshì yòng zìjǐ de pànduàn yījù kàn shìqíng. English: The correct answer is standard. It means judging things by their own standards."
+    }
+  ]
+}
