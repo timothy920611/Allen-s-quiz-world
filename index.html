@@ -76,10 +76,37 @@
                         <pre class="bg-indigo-900/80 border border-indigo-700 rounded-xl p-3 text-[11px] leading-relaxed text-indigo-100 overflow-x-auto"><code>[
   {
     "date": "2026-04-20",
+    "type": "multiple_choice",
     "question": "「apple」的中文意思是什麼？",
+    "question_en": "What is the meaning of 'apple' in Chinese?",
     "options": ["蘋果", "香蕉", "葡萄", "西瓜"],
+    "options_en": ["apple", "banana", "grape", "watermelon"],
     "answer": 0,
-    "hint": ""
+    "hint": "這是常見水果。"
+  },
+  {
+    "date": "2026-04-20",
+    "type": "true_false",
+    "question": "「library」是「圖書館」的意思。",
+    "question_en": "'Library' means '圖書館'.",
+    "answer_boolean": true
+  },
+  {
+    "date": "2026-04-20",
+    "type": "short_answer",
+    "question": "請寫出「老師」的英文。",
+    "question_en": "Write the English word for 「老師」.",
+    "short_answer": "teacher",
+    "accepted_answers": ["teacher", "a teacher"]
+  },
+  {
+    "date": "2026-04-20",
+    "type": "reading_comprehension",
+    "passage": "Tom goes to school by bus every day. He leaves home at 7:30 and arrives at 8:00.",
+    "question": "Tom 幾點到學校？",
+    "question_en": "What time does Tom arrive at school?",
+    "options": ["7:00", "7:30", "8:00", "8:30"],
+    "answer": 2
   }
 ]</code></pre>
                     </div>
@@ -146,6 +173,27 @@
                         </label>
                     </div>
                 </div>
+                <div>
+                    <label class="flex items-center justify-between bg-slate-50 border-2 border-slate-100 rounded-2xl p-4 cursor-pointer">
+                        <div>
+                            <p class="text-sm font-bold text-slate-700">顯示英文題目內容 (Show English text)</p>
+                            <p class="text-xs text-slate-400">可切換是否顯示題目/選項英文欄位</p>
+                        </div>
+                        <input id="showEnglishToggle" type="checkbox" class="w-5 h-5 accent-indigo-600">
+                    </label>
+                </div>
+                <div class="bg-slate-50 border-2 border-slate-100 rounded-2xl p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <p class="text-sm font-bold text-slate-700">題型篩選（可複選）</p>
+                        <button type="button" onclick="selectAllTypes()" class="text-xs font-bold text-indigo-600 hover:text-indigo-700">一鍵全選</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 text-sm text-slate-700">
+                        <label class="flex items-center gap-2"><input type="checkbox" class="type-checkbox accent-indigo-600" value="multiple_choice" checked> 選擇題</label>
+                        <label class="flex items-center gap-2"><input type="checkbox" class="type-checkbox accent-indigo-600" value="true_false" checked> 是非題</label>
+                        <label class="flex items-center gap-2"><input type="checkbox" class="type-checkbox accent-indigo-600" value="short_answer" checked> 簡答題</label>
+                        <label class="flex items-center gap-2"><input type="checkbox" class="type-checkbox accent-indigo-600" value="reading_comprehension" checked> 閱讀測驗</label>
+                    </div>
+                </div>
 
                 <button onclick="generateQuiz()" id="startBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-5 rounded-3xl font-black text-2xl shadow-xl transform transition-all active:scale-[0.97] disabled:bg-slate-200 disabled:cursor-not-allowed" disabled>
                     開始測驗 (Start Quiz) 🚀
@@ -209,6 +257,7 @@
         let selectedRange = 'all';
         let isAdmin = false;
         let studentName = '';
+        let showEnglish = false;
         const QUIZ_HISTORY_KEY = 'allen_quiz_history_v1';
 
         window.onload = async () => {
@@ -350,17 +399,22 @@
                 return;
             }
             studentName = nameVal;
+            showEnglish = document.getElementById('showEnglishToggle').checked;
 
             const date = document.getElementById('dateSelect').value;
             selectedRange = date || 'all';
             const countVal = document.querySelector('input[name="count"]:checked').value;
+            const selectedTypes = getSelectedTypes();
+            if (selectedTypes.length === 0) return showStatus("請至少勾選一種題型", "error");
+
             let pool = (date === 'all' || !date) ? questionBank : questionBank.filter(q => q.date === date);
+            pool = pool.filter(q => selectedTypes.includes(q.type || 'multiple_choice'));
             if (!pool || pool.length === 0) return showStatus("選定範圍內無題目", "error");
 
             userAnswers = {};
             pool = [...pool].sort(() => Math.random() - 0.5);
             const num = countVal === 'all' ? pool.length : Math.min(parseInt(countVal), pool.length);
-            currentQuiz = pool.slice(0, num).map(shuffleQuestionOptions);
+            currentQuiz = pool.slice(0, num).map(normalizeQuestion).map(shuffleQuestionOptions);
 
             renderQuiz();
             document.getElementById('section-settings').classList.add('hidden-section');
@@ -374,16 +428,16 @@
             currentQuiz.forEach((q, idx) => {
                 const card = document.createElement('div');
                 card.className = "bg-white p-6 md:p-10 rounded-[2rem] shadow-lg border border-slate-100 fade-in";
-                card.innerHTML = `
-                    <div class="mb-8">
-                        <div class="flex items-center gap-3 mb-3 flex-wrap">
-                            <span class="bg-indigo-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Question ${idx + 1}</span>
-                            ${q.city ? `<span class="bg-sky-100 text-sky-700 text-[10px] font-black px-3 py-1 rounded-full tracking-widest">CITY · ${q.city}</span>` : ''}
-                        </div>
-                        <h3 class="text-2xl md:text-3xl text-slate-800 font-black mb-2 leading-snug">${q.question}</h3>
-                        ${q.question_pinyin ? `<div class="pinyin text-lg mb-1">${q.question_pinyin}</div>` : ''}
-                    </div>
-                    <div class="grid grid-cols-1 gap-4">
+                const qType = q.type || 'multiple_choice';
+                const readingBlock = qType === 'reading_comprehension' && q.passage
+                    ? `<div class="bg-sky-50 border border-sky-200 rounded-2xl p-4 mb-4 text-slate-700 text-sm leading-relaxed">
+                        <p>${q.passage}</p>
+                        ${showEnglish && q.passage_en ? `<p class="english mt-2">${q.passage_en}</p>` : ''}
+                      </div>` : '';
+                const answerBlock = qType === 'short_answer'
+                    ? `<input type="text" oninput="setShortAnswer(${idx}, this.value)" placeholder="請輸入答案..."
+                        class="w-full p-4 border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all bg-slate-50 font-medium text-slate-700" />`
+                    : `<div class="grid grid-cols-1 gap-4">
                         ${q.options.map((opt, i) => `
                             <label onclick="selectOption(${idx}, ${i})" class="group flex items-center gap-5 p-5 md:p-6 border-2 border-slate-50 rounded-3xl cursor-pointer hover:border-indigo-200 hover:bg-indigo-50/50 transition-all option-card-${idx}">
                                 <div class="w-8 h-8 rounded-full border-2 border-slate-200 flex items-center justify-center group-hover:border-indigo-400 radio-circle-${idx} shrink-0">
@@ -391,11 +445,24 @@
                                 </div>
                                 <div class="flex flex-col flex-1">
                                     <span class="font-bold text-xl text-slate-700">${opt}</span>
+                                    ${showEnglish && q.options_en ? `<span class="english text-sm mt-1">${q.options_en[i] || ''}</span>` : ''}
                                     ${q.options_pinyin ? `<span class="pinyin text-sm mt-1">${q.options_pinyin[i] || ''}</span>` : ''}
                                 </div>
                             </label>
                         `).join('')}
+                    </div>`;
+                card.innerHTML = `
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-3 flex-wrap">
+                            <span class="bg-indigo-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Question ${idx + 1}</span>
+                            ${q.city ? `<span class="bg-sky-100 text-sky-700 text-[10px] font-black px-3 py-1 rounded-full tracking-widest">CITY · ${q.city}</span>` : ''}
+                        </div>
+                        ${readingBlock}
+                        <h3 class="text-2xl md:text-3xl text-slate-800 font-black mb-2 leading-snug">${q.question}</h3>
+                        ${showEnglish && q.question_en ? `<div class="english mb-2">${q.question_en}</div>` : ''}
+                        ${q.question_pinyin ? `<div class="pinyin text-lg mb-1">${q.question_pinyin}</div>` : ''}
                     </div>
+                    ${answerBlock}
                     <div class="mt-5">
                         <button type="button" onclick="toggleHint(${idx})" class="text-sm font-bold bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 px-4 py-2 rounded-2xl transition-all">
                             💡 顯示 / 隱藏提示 (Hint)
@@ -407,6 +474,14 @@
                 `;
                 container.appendChild(card);
             });
+        }
+
+        function getSelectedTypes() {
+            return [...document.querySelectorAll('.type-checkbox:checked')].map(el => el.value);
+        }
+
+        function selectAllTypes() {
+            document.querySelectorAll('.type-checkbox').forEach(el => el.checked = true);
         }
 
         function toggleHint(qIdx) {
@@ -429,6 +504,20 @@
                 }
             });
         }
+
+
+        function normalizeQuestion(question) {
+            const q = { ...question };
+            const qType = q.type || 'multiple_choice';
+            if (qType === 'true_false') {
+                q.options = ['是', '否'];
+                q.options_en = ['True', 'False'];
+                if (typeof q.answer_boolean === 'boolean') q.answer = q.answer_boolean ? 0 : 1;
+            }
+            return q;
+        }
+
+        function setShortAnswer(qIdx, value) { userAnswers[qIdx] = (value || '').trim(); }
 
         function normalizeAnswerIndexes(q) {
             if (!q || !Array.isArray(q.options)) return [];
@@ -484,20 +573,41 @@
             let correct = 0;
             const reviewItems = currentQuiz.map((q, idx) => {
                 const userChoice = userAnswers[idx];
-                const correctIndexes = normalizeAnswerIndexes(q);
-                const isCorrect = correctIndexes.includes(userChoice);
+                const qType = q.type || 'multiple_choice';
+                let isCorrect = false;
+                let correctAnswer = '（未提供）';
+                let correctAnswerPinyin = '';
+                let userAnswer = '（未作答）';
+                let userAnswerPinyin = '';
+
+                if (qType === 'short_answer') {
+                    const accepted = [q.short_answer, ...(Array.isArray(q.accepted_answers) ? q.accepted_answers : [])]
+                        .filter(Boolean).map(v => String(v).trim().toLowerCase());
+                    const userValue = String(userChoice || '').trim();
+                    isCorrect = accepted.includes(userValue.toLowerCase());
+                    correctAnswer = q.short_answer || '（未提供）';
+                    userAnswer = userValue || '（未作答）';
+                } else {
+                    const correctIndexes = normalizeAnswerIndexes(q);
+                    isCorrect = correctIndexes.includes(userChoice);
+                    const correctAnswerList = correctIndexes.map(i => q.options[i]).filter(Boolean);
+                    const correctPinyinList = correctIndexes.map(i => q.options_pinyin?.[i] || '').filter(Boolean);
+                    correctAnswer = correctAnswerList.length > 0 ? correctAnswerList.join(' / ') : (q.short_answer || '（未提供）');
+                    correctAnswerPinyin = correctPinyinList.join(' / ');
+                    userAnswer = q.options?.[userChoice] || '（未作答）';
+                    userAnswerPinyin = q.options_pinyin?.[userChoice] || '';
+                }
                 if (isCorrect) correct++;
-                const correctAnswerList = correctIndexes.map(i => q.options[i]).filter(Boolean);
-                const correctPinyinList = correctIndexes.map(i => q.options_pinyin?.[i] || '').filter(Boolean);
                 return {
                     questionIndex: idx + 1,
                     question: q.question,
                     questionPinyin: q.question_pinyin || '',
+                    questionEn: q.question_en || '',
                     isCorrect,
-                    correctAnswer: correctAnswerList.length > 0 ? correctAnswerList.join(' / ') : (q.short_answer || '（未提供）'),
-                    correctAnswerPinyin: correctPinyinList.join(' / '),
-                    userAnswer: q.options[userChoice],
-                    userAnswerPinyin: q.options_pinyin?.[userChoice] || '',
+                    correctAnswer,
+                    correctAnswerPinyin,
+                    userAnswer,
+                    userAnswerPinyin,
                     explain: typeof q.explain === 'string' ? q.explain : ''
                 };
             });
@@ -587,6 +697,7 @@
                     ${reviewItems.map(item => `
                         <div class="bg-white border ${item.isCorrect ? 'border-emerald-200' : 'border-rose-200'} rounded-2xl p-4 md:p-5">
                             <p class="text-slate-800 font-bold mb-2">第 ${item.questionIndex} 題：${item.question}</p>
+                            ${showEnglish && item.questionEn ? `<p class="english mb-2">${item.questionEn}</p>` : ''}
                             ${item.questionPinyin ? `<p class="pinyin mb-2">${item.questionPinyin}</p>` : ''}
                             <p class="text-sm font-bold mb-2 ${item.isCorrect ? 'text-emerald-600' : 'text-rose-600'}">
                                 ${item.isCorrect ? '✅ 答對' : '❌ 答錯'}
