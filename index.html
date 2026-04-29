@@ -433,6 +433,7 @@
                     ? `<div class="bg-sky-50 border border-sky-200 rounded-2xl p-4 mb-4 text-slate-700 text-sm leading-relaxed">
                         <p>${q.passage}</p>
                         ${showEnglish && q.passage_en ? `<p class="english mt-2">${q.passage_en}</p>` : ''}
+                        ${q.passage_pinyin ? `<p class="pinyin mt-2">${q.passage_pinyin}</p>` : ''}
                       </div>` : '';
                 const answerBlock = qType === 'short_answer'
                     ? `<input type="text" oninput="setShortAnswer(${idx}, this.value)" placeholder="請輸入答案..."
@@ -488,12 +489,35 @@
             document.getElementById(`hint-${qIdx}`)?.classList.toggle('hidden-section');
         }
 
+        function isMultiSelectQuestion(question) {
+            return normalizeAnswerIndexes(question).length > 1;
+        }
+
+        function hasAnsweredQuestion(question, answerValue) {
+            if ((question.type || 'multiple_choice') === 'short_answer') return String(answerValue || '').trim() !== '';
+            if (isMultiSelectQuestion(question)) return Array.isArray(answerValue) && answerValue.length > 0;
+            return Number.isInteger(answerValue);
+        }
+
         function selectOption(qIdx, optIdx) {
-            userAnswers[qIdx] = optIdx;
+            const question = currentQuiz[qIdx];
+            const isMulti = isMultiSelectQuestion(question);
+            if (isMulti) {
+                const selected = Array.isArray(userAnswers[qIdx]) ? [...userAnswers[qIdx]] : [];
+                const pos = selected.indexOf(optIdx);
+                if (pos >= 0) selected.splice(pos, 1);
+                else selected.push(optIdx);
+                userAnswers[qIdx] = selected;
+            } else {
+                userAnswers[qIdx] = optIdx;
+            }
             document.querySelectorAll(`.option-card-${qIdx}`).forEach((c, i) => {
                 const dot = c.querySelector(`.radio-dot-${qIdx}`);
                 const circle = c.querySelector(`.radio-circle-${qIdx}`);
-                if (i === optIdx) {
+                const selected = isMulti
+                    ? Array.isArray(userAnswers[qIdx]) && userAnswers[qIdx].includes(i)
+                    : i === optIdx;
+                if (selected) {
                     c.classList.add('border-indigo-600', 'bg-indigo-50');
                     dot.classList.replace('scale-0', 'scale-100');
                     circle.classList.replace('border-slate-200', 'border-indigo-600');
@@ -568,7 +592,8 @@
         // ── 交卷 ────────────────────────────────────────────────
         async function submitQuiz() {
             const total = currentQuiz.length;
-            if (Object.keys(userAnswers).length < total) return showStatus("請完成所有題目後再交卷", "error");
+            const answeredCount = currentQuiz.filter((q, idx) => hasAnsweredQuestion(q, userAnswers[idx])).length;
+            if (answeredCount < total) return showStatus("請完成所有題目後再交卷", "error");
 
             let correct = 0;
             const reviewItems = currentQuiz.map((q, idx) => {
@@ -589,13 +614,22 @@
                     userAnswer = userValue || '（未作答）';
                 } else {
                     const correctIndexes = normalizeAnswerIndexes(q);
-                    isCorrect = correctIndexes.includes(userChoice);
+                    if (isMultiSelectQuestion(q)) {
+                        const userChoices = Array.isArray(userChoice) ? [...new Set(userChoice)] : [];
+                        const sortedUser = userChoices.slice().sort((a, b) => a - b);
+                        const sortedCorrect = correctIndexes.slice().sort((a, b) => a - b);
+                        isCorrect = sortedUser.length === sortedCorrect.length && sortedUser.every((v, i) => v === sortedCorrect[i]);
+                        userAnswer = userChoices.map(i => q.options?.[i]).filter(Boolean).join(' / ') || '（未作答）';
+                        userAnswerPinyin = userChoices.map(i => q.options_pinyin?.[i] || '').filter(Boolean).join(' / ');
+                    } else {
+                        isCorrect = correctIndexes.includes(userChoice);
+                        userAnswer = q.options?.[userChoice] || '（未作答）';
+                        userAnswerPinyin = q.options_pinyin?.[userChoice] || '';
+                    }
                     const correctAnswerList = correctIndexes.map(i => q.options[i]).filter(Boolean);
                     const correctPinyinList = correctIndexes.map(i => q.options_pinyin?.[i] || '').filter(Boolean);
                     correctAnswer = correctAnswerList.length > 0 ? correctAnswerList.join(' / ') : (q.short_answer || '（未提供）');
                     correctAnswerPinyin = correctPinyinList.join(' / ');
-                    userAnswer = q.options?.[userChoice] || '（未作答）';
-                    userAnswerPinyin = q.options_pinyin?.[userChoice] || '';
                 }
                 if (isCorrect) correct++;
                 return {
