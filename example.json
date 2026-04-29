@@ -2,13 +2,13 @@
   {
     "date": "2026-04-20",
     "type": "multiple_choice",
-    "city": "台北",
+    "city": "北京",
     "passage": "",
     "passage_en": "",
     "passage_pinyin": "",
-    "question": "以下哪些是水果？（可多选）",
-    "question_en": "Which of the following are fruits? (Select all that apply)",
-    "question_pinyin": "yǐxià nǎxiē shì shuǐguǒ? (kě duōxuǎn)",
+    "question": "“apple”的中文意思是什么？（单选）",
+    "question_en": "What is the Chinese meaning of \"apple\"? (Single choice)",
+    "question_pinyin": "\"apple\" de zhōngwén yìsi shì shénme? (dānxuǎn)",
     "options": [
       "苹果",
       "香蕉",
@@ -27,27 +27,62 @@
       "pútáo",
       "zhuōzi"
     ],
+    "answer": 0,
+    "answer_boolean": "",
+    "short_answer": "",
+    "accepted_answers": [],
+    "hint": "这是单选题，只会有一个正确答案。",
+    "explain": "apple 的中文是“苹果”，所以答案是第 1 项（索引 0）。"
+  },
+  {
+    "date": "2026-04-20",
+    "type": "multiple_choice",
+    "city": "上海",
+    "passage": "",
+    "passage_en": "",
+    "passage_pinyin": "",
+    "question": "以下哪些是可再生能源？（多选）",
+    "question_en": "Which of the following are renewable energy sources? (Multiple select)",
+    "question_pinyin": "yǐxià nǎxiē shì kě zàishēng néngyuán? (duōxuǎn)",
+    "options": [
+      "太阳能",
+      "风能",
+      "煤炭",
+      "水能"
+    ],
+    "options_en": [
+      "solar energy",
+      "wind energy",
+      "coal",
+      "hydropower"
+    ],
+    "options_pinyin": [
+      "tàiyángnéng",
+      "fēngnéng",
+      "méitàn",
+      "shuǐnéng"
+    ],
     "answer": [
       0,
       1,
-      2
+      3
     ],
     "answer_boolean": "",
     "short_answer": "",
     "accepted_answers": [],
-    "hint": "水果不包含家具。",
-    "explain": "苹果、香蕉、葡萄是水果。"
+    "hint": "想想可以持续补充、不会在短时间内耗尽的能源。",
+    "explain": "太阳能、风能和水能都属于可再生能源；煤炭属于化石燃料，不是可再生能源。"
   },
   {
     "date": "2026-04-20",
     "type": "true_false",
-    "city": "",
+    "city": "广州",
     "passage": "",
     "passage_en": "",
     "passage_pinyin": "",
-    "question": "图书馆是不是 Library？",
-    "question_en": "Is 图书馆 library?",
-    "question_pinyin": "túshūguǎn shì bú shì Library?",
+    "question": "“图书馆”的英文是 “library”。",
+    "question_en": "The English word for “图书馆” is “library”.",
+    "question_pinyin": "\"túshūguǎn\" de yīngwén shì \"library\".",
     "options": [],
     "options_en": [],
     "options_pinyin": [],
@@ -55,19 +90,19 @@
     "answer_boolean": true,
     "short_answer": "",
     "accepted_answers": [],
-    "hint": "想想借书的地方。",
-    "explain": "图书馆对应英文 library。"
+    "hint": "想想学校里借书的地方英文怎么说。",
+    "explain": "“图书馆”对应的标准英文是 library，所以这是正确的。"
   },
   {
     "date": "2026-04-20",
     "type": "short_answer",
-    "city": "",
+    "city": "深圳",
     "passage": "",
     "passage_en": "",
     "passage_pinyin": "",
-    "question": "请写出\"老师\"的英文。",
-    "question_en": "Write the English word for \"老师\".",
-    "question_pinyin": "qǐng xiě chū lǎoshī de yīngwén.",
+    "question": "请写出“老师”的英文。",
+    "question_en": "Please write the English word for “老师”.",
+    "question_pinyin": "qǐng xiě chū \"lǎoshī\" de yīngwén.",
     "options": [],
     "options_en": [],
     "options_pinyin": [],
@@ -78,42 +113,42 @@
       "teacher",
       "a teacher"
     ],
-    "hint": "在学校教课的人。",
-    "explain": "标准答案为 teacher"
+    "hint": "是在学校给学生上课的人。",
+    "explain": "“老师”最常用、最标准的英文是 teacher。"
   },
   {
     "date": "2026-04-20",
     "type": "reading_comprehension",
-    "city": "高雄",
-    "passage": "Tom 每天搭公交车去学校。他早上7:30从家里出发，早上8:00到学校。",
-    "passage_en": "Tom goes to school by bus every day. He leaves home at 7:30 and arrives at 8:00.",
-    "passage_pinyin": "Tom měitiān dā gōngjiāochē qù xuéxiào. Tā zǎoshang 7:30 cóng jiālǐ chūfā, zǎoshang 8:00 dào xuéxiào.",
-    "question": "Tom 几点到学校？",
-    "question_en": "What time does Tom arrive at school?",
-    "question_pinyin": "Tom jǐ diǎn dào xuéxiào?",
+    "city": "杭州",
+    "passage": "小李每天坐地铁去公司。他早上7:40出门，8:20到公司。今天地铁正常运行。",
+    "passage_en": "Xiao Li takes the subway to work every day. He leaves home at 7:40 a.m. and arrives at 8:20 a.m. Today the subway is running normally.",
+    "passage_pinyin": "Xiǎo Lǐ měitiān zuò dìtiě qù gōngsī. Tā zǎoshang 7:40 chūmén, 8:20 dào gōngsī. Jīntiān dìtiě zhèngcháng yùnxíng.",
+    "question": "小李几点到公司？",
+    "question_en": "What time does Xiao Li arrive at work?",
+    "question_pinyin": "Xiǎo Lǐ jǐ diǎn dào gōngsī?",
     "options": [
-      "7:00",
-      "7:30",
+      "7:40",
       "8:00",
-      "8:30"
+      "8:20",
+      "8:40"
     ],
     "options_en": [
-      "7:00",
-      "7:30",
+      "7:40",
       "8:00",
-      "8:30"
+      "8:20",
+      "8:40"
     ],
     "options_pinyin": [
-      "qī diǎn",
-      "qī diǎn bàn",
+      "qī diǎn sìshí",
       "bā diǎn",
-      "bā diǎn bàn"
+      "bā diǎn èrshí",
+      "bā diǎn sìshí"
     ],
     "answer": 2,
     "answer_boolean": "",
     "short_answer": "",
     "accepted_answers": [],
-    "hint": "看最后一句。",
-    "explain": "He arrives at 8:00."
+    "hint": "看短文第二句的到达时间。",
+    "explain": "短文明确写到“小李……8:20到公司”，所以答案是 8:20。"
   }
 ]
