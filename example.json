@@ -2,52 +2,118 @@
   {
     "date": "2026-04-20",
     "type": "multiple_choice",
-    "city": "Taipei",
-    "question": "「apple」的中文意思是什麼？",
-    "question_en": "What is the meaning of 'apple' in Chinese?",
-    "question_pinyin": "apple de zhōngwén yìsi shì shénme?",
-    "options": ["蘋果", "香蕉", "葡萄", "西瓜"],
-    "options_en": ["apple", "banana", "grape", "watermelon"],
-    "options_pinyin": ["píngguǒ", "xiāngjiāo", "pútáo", "xīguā"],
-    "answer": 0,
-    "hint": "這是常見水果。",
-    "explain": "apple = 蘋果"
+    "city": "台北",
+    "passage": "",
+    "passage_en": "",
+    "passage_pinyin": "",
+    "question": "以下哪些是水果？（可多选）",
+    "question_en": "Which of the following are fruits? (Select all that apply)",
+    "question_pinyin": "yǐxià nǎxiē shì shuǐguǒ? (kě duōxuǎn)",
+    "options": [
+      "苹果",
+      "香蕉",
+      "葡萄",
+      "桌子"
+    ],
+    "options_en": [
+      "apple",
+      "banana",
+      "grape",
+      "desk"
+    ],
+    "options_pinyin": [
+      "píngguǒ",
+      "xiāngjiāo",
+      "pútáo",
+      "zhuōzi"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "answer_boolean": "",
+    "short_answer": "",
+    "accepted_answers": [],
+    "hint": "水果不包含家具。",
+    "explain": "苹果、香蕉、葡萄是水果。"
   },
   {
     "date": "2026-04-20",
     "type": "true_false",
-    "question": "「library」是「图书馆」的意思。",
-    "question_en": "'Library' means '圖書館'.",
-    "question_pinyin": "library shì túshūguǎn de yìsi.",
+    "city": "",
+    "passage": "",
+    "passage_en": "",
+    "passage_pinyin": "",
+    "question": "图书馆是不是 Library？",
+    "question_en": "Is 图书馆 library?",
+    "question_pinyin": "túshūguǎn shì bú shì Library?",
+    "options": [],
+    "options_en": [],
+    "options_pinyin": [],
+    "answer": "",
     "answer_boolean": true,
-    "hint": "借書的地方。",
-    "explain": "library = 图书馆"
+    "short_answer": "",
+    "accepted_answers": [],
+    "hint": "想想借书的地方。",
+    "explain": "图书馆对应英文 library。"
   },
   {
     "date": "2026-04-20",
     "type": "short_answer",
-    "question": "請寫出「老師」的英文。",
-    "question_en": "Write the English word for 「老師」.",
+    "city": "",
+    "passage": "",
+    "passage_en": "",
+    "passage_pinyin": "",
+    "question": "请写出\"老师\"的英文。",
+    "question_en": "Write the English word for \"老师\".",
     "question_pinyin": "qǐng xiě chū lǎoshī de yīngwén.",
+    "options": [],
+    "options_en": [],
+    "options_pinyin": [],
+    "answer": "",
+    "answer_boolean": "",
     "short_answer": "teacher",
-    "accepted_answers": ["teacher", "a teacher"],
-    "hint": "在學校教課的人。",
-    "explain": "標準答案為 teacher"
+    "accepted_answers": [
+      "teacher",
+      "a teacher"
+    ],
+    "hint": "在学校教课的人。",
+    "explain": "标准答案为 teacher"
   },
   {
     "date": "2026-04-20",
     "type": "reading_comprehension",
-    "city": "Kaohsiung",
-    "passage": "Tom 每天搭公车去学校. 他早上7:30从家里出发，早上8:00到学校。",
+    "city": "高雄",
+    "passage": "Tom 每天搭公交车去学校。他早上7:30从家里出发，早上8:00到学校。",
     "passage_en": "Tom goes to school by bus every day. He leaves home at 7:30 and arrives at 8:00.",
-    "question": "Tom 幾點到學校？",
+    "passage_pinyin": "Tom měitiān dā gōngjiāochē qù xuéxiào. Tā zǎoshang 7:30 cóng jiālǐ chūfā, zǎoshang 8:00 dào xuéxiào.",
+    "question": "Tom 几点到学校？",
     "question_en": "What time does Tom arrive at school?",
     "question_pinyin": "Tom jǐ diǎn dào xuéxiào?",
-    "options": ["7:00", "7:30", "8:00", "8:30"],
-    "options_en": ["7:00", "7:30", "8:00", "8:30"],
-    "options_pinyin": ["qī diǎn", "qī diǎn bàn", "bā diǎn", "bā diǎn bàn"],
+    "options": [
+      "7:00",
+      "7:30",
+      "8:00",
+      "8:30"
+    ],
+    "options_en": [
+      "7:00",
+      "7:30",
+      "8:00",
+      "8:30"
+    ],
+    "options_pinyin": [
+      "qī diǎn",
+      "qī diǎn bàn",
+      "bā diǎn",
+      "bā diǎn bàn"
+    ],
     "answer": 2,
-    "hint": "看最後一句。",
+    "answer_boolean": "",
+    "short_answer": "",
+    "accepted_answers": [],
+    "hint": "看最后一句。",
     "explain": "He arrives at 8:00."
   }
 ]
