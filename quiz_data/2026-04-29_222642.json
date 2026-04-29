@@ -1,0 +1,185 @@
+[
+  {
+    "date": "2026-04-29",
+    "type": "multiple_choice",
+    "city": "北京",
+    "passage": "",
+    "passage_en": "",
+    "passage_pinyin": "",
+    "question": "“朋友”的英文意思是什么？（单选）",
+    "question_en": "What is the English meaning of “朋友”? (Single choice)",
+    "question_pinyin": "\"péngyou\" de yīngwén yìsi shì shénme? (dānxuǎn)",
+    "options": [
+      "friend",
+      "teacher",
+      "doctor",
+      "student"
+    ],
+    "options_en": [
+      "friend",
+      "teacher",
+      "doctor",
+      "student"
+    ],
+    "options_pinyin": [
+      "friend",
+      "teacher",
+      "doctor",
+      "student"
+    ],
+    "answer": 0,
+    "answer_boolean": "",
+    "short_answer": "",
+    "accepted_answers": [],
+    "hint": "是你喜欢一起聊天的人。",
+    "explain": "“朋友”的英文是 friend，所以答案是第1项。Pinyin: Péngyou de yīngwén shì friend. English: The English meaning of 朋友 is friend."
+  },
+  {
+    "date": "2026-04-29",
+    "type": "multiple_choice",
+    "city": "上海",
+    "passage": "",
+    "passage_en": "",
+    "passage_pinyin": "",
+    "question": "为了考试，我每天学习中文。句中“为了”表示什么？（单选）",
+    "question_en": "In the sentence, what does “为了” express? (Single choice)",
+    "question_pinyin": "Wèile kǎoshì, wǒ měitiān xuéxí Zhōngwén. Jù zhōng \"wèile\" biǎoshì shénme? (dānxuǎn)",
+    "options": [
+      "时间",
+      "地点",
+      "目的",
+      "数量"
+    ],
+    "options_en": [
+      "time",
+      "place",
+      "purpose",
+      "quantity"
+    ],
+    "options_pinyin": [
+      "shíjiān",
+      "dìdiǎn",
+      "mùdì",
+      "shùliàng"
+    ],
+    "answer": 2,
+    "answer_boolean": "",
+    "short_answer": "",
+    "accepted_answers": [],
+    "hint": "想想为什么每天学习中文。",
+    "explain": "“为了”用来表示目的，这里是为了考试。Pinyin: “Wèile” yòng lái biǎoshì mùdì. English: 为了 is used to express purpose."
+  },
+  {
+    "date": "2026-04-29",
+    "type": "true_false",
+    "city": "广州",
+    "passage": "",
+    "passage_en": "",
+    "passage_pinyin": "",
+    "question": "“有些人喜欢咖啡，有些人喜欢茶。”这句话表示不同的人有不同的喜好。",
+    "question_en": "This sentence means different people have different preferences.",
+    "question_pinyin": "\"Yǒuxiē rén xǐhuān kāfēi, yǒuxiē rén xǐhuān chá.\" Zhè jù huà biǎoshì bùtóng de rén yǒu bùtóng de xǐhào.",
+    "options": [],
+    "options_en": [],
+    "options_pinyin": [],
+    "answer": "",
+    "answer_boolean": true,
+    "short_answer": "",
+    "accepted_answers": [],
+    "hint": "注意“有些……有些……”的用法。",
+    "explain": "这句话把人分成两类，所以表示不同的人有不同喜好。Pinyin: Zhè jù huà bǎ rén fēn chéng liǎng lèi. English: The sentence divides people into two groups with different preferences."
+  },
+  {
+    "date": "2026-04-29",
+    "type": "multiple_choice",
+    "city": "深圳",
+    "passage": "",
+    "passage_en": "",
+    "passage_pinyin": "",
+    "question": "老师从学生中选出班长。句中“从……中……”最接近什么意思？（单选）",
+    "question_en": "What does “从……中……” most nearly mean? (Single choice)",
+    "question_pinyin": "Lǎoshī cóng xuéshēng zhōng xuǎn chū bānzhǎng. Jù zhōng \"cóng...zhōng...\" zuì jiējìn shénme yìsi? (dānxuǎn)",
+    "options": [
+      "在群体里面选择",
+      "马上离开",
+      "表示时间",
+      "表示比较"
+    ],
+    "options_en": [
+      "choose from a group",
+      "leave immediately",
+      "express time",
+      "make comparison"
+    ],
+    "options_pinyin": [
+      "zài qúntǐ lǐmiàn xuǎnzé",
+      "mǎshàng líkāi",
+      "biǎoshì shíjiān",
+      "biǎoshì bǐjiào"
+    ],
+    "answer": 0,
+    "answer_boolean": "",
+    "short_answer": "",
+    "accepted_answers": [],
+    "hint": "班长是从学生这个群体里选出来的。",
+    "explain": "“从……中……”表示在一个范围或群体里进行选择。Pinyin: Biǎoshì zài yí gè fànwéi lǐ xuǎnzé. English: It means selecting from within a group."
+  },
+  {
+    "date": "2026-04-29",
+    "type": "short_answer",
+    "city": "杭州",
+    "passage": "",
+    "passage_en": "",
+    "passage_pinyin": "",
+    "question": "请写出“决定”的英文。",
+    "question_en": "Please write the English word for “决定”.",
+    "question_pinyin": "Qǐng xiě chū \"juédìng\" de yīngwén.",
+    "options": [],
+    "options_en": [],
+    "options_pinyin": [],
+    "answer": "",
+    "answer_boolean": "",
+    "short_answer": "decision",
+    "accepted_answers": [
+      "decision",
+      "a decision"
+    ],
+    "hint": "表示选择后的结果。",
+    "explain": "“决定”作名词时最常见英文是 decision。Pinyin: “Juédìng” zuò míngcí shì decision. English: The noun form of 决定 is decision."
+  },
+  {
+    "date": "2026-04-29",
+    "type": "reading_comprehension",
+    "city": "成都",
+    "passage": "小王很喜欢学习中文。为了进步，他每天早上读课文，晚上练习写字。有时候他喝咖啡以后继续学习。",
+    "passage_en": "Xiao Wang likes studying Chinese very much. To improve, he reads texts every morning and practices writing at night. Sometimes he drinks coffee and continues studying.",
+    "passage_pinyin": "Xiǎo Wáng hěn xǐhuān xuéxí Zhōngwén. Wèile jìnbù, tā měitiān zǎoshang dú kèwén, wǎnshang liànxí xiězì. Yǒu shíhou tā hē kāfēi yǐhòu jìxù xuéxí.",
+    "question": "小王晚上做什么？",
+    "question_en": "What does Xiao Wang do at night?",
+    "question_pinyin": "Xiǎo Wáng wǎnshang zuò shénme?",
+    "options": [
+      "打网球",
+      "练习写字",
+      "去旅行",
+      "睡到中午"
+    ],
+    "options_en": [
+      "play tennis",
+      "practice writing",
+      "travel",
+      "sleep until noon"
+    ],
+    "options_pinyin": [
+      "dǎ wǎngqiú",
+      "liànxí xiězì",
+      "qù lǚxíng",
+      "shuì dào zhōngwǔ"
+    ],
+    "answer": 1,
+    "answer_boolean": "",
+    "short_answer": "",
+    "accepted_answers": [],
+    "hint": "看第二句晚上做的事。",
+    "explain": "短文说他晚上练习写字，所以答案是第2项。Pinyin: Duǎnwén shuō tā wǎnshang liànxí xiězì. English: The passage says he practices writing at night, so option 2 is correct."
+  }
+]
