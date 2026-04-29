@@ -16,12 +16,12 @@
   {
     "date": "2026-04-20",
     "type": "true_false",
-    "question": "「library」是「圖書館」的意思。",
+    "question": "「library」是「图书馆」的意思。",
     "question_en": "'Library' means '圖書館'.",
     "question_pinyin": "library shì túshūguǎn de yìsi.",
     "answer_boolean": true,
     "hint": "借書的地方。",
-    "explain": "library = 圖書館"
+    "explain": "library = 图书馆"
   },
   {
     "date": "2026-04-20",
@@ -38,7 +38,7 @@
     "date": "2026-04-20",
     "type": "reading_comprehension",
     "city": "Kaohsiung",
-    "passage": "Tom goes to school by bus every day. He leaves home at 7:30 and arrives at 8:00.",
+    "passage": "Tom 每天搭公车去学校. 他早上7:30从家里出发，早上8:00到学校。",
     "passage_en": "Tom goes to school by bus every day. He leaves home at 7:30 and arrives at 8:00.",
     "question": "Tom 幾點到學校？",
     "question_en": "What time does Tom arrive at school?",
