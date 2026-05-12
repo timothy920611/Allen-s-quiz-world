@@ -1,0 +1,130 @@
+{
+  "date": "2026-05-12T00:26:43.516Z",
+  "studentName": "Allen",
+  "score": 90,
+  "correct": 9,
+  "total": 10,
+  "range": "all",
+  "reviewItems": [
+    {
+      "questionIndex": 1,
+      "question": "Which is the meaning of “Lie”?",
+      "questionPinyin": "",
+      "questionEn": "",
+      "isCorrect": true,
+      "correctAnswer": "谎言",
+      "correctAnswerPinyin": "huǎngyán",
+      "userAnswer": "谎言",
+      "userAnswerPinyin": "huǎngyán",
+      "explain": ""
+    },
+    {
+      "questionIndex": 2,
+      "question": "老师让学生_____作业。",
+      "questionPinyin": "Lǎoshī ràng xuéshēng _____ zuòyè.",
+      "questionEn": "",
+      "isCorrect": true,
+      "correctAnswer": "完成",
+      "correctAnswerPinyin": "wánchéng",
+      "userAnswer": "完成",
+      "userAnswerPinyin": "wánchéng",
+      "explain": "In causative sentences with '让', we use the verb in its base form. '了' indicates a completed action, but here the teacher is giving an instruction, not describing a completed result. 中文：在“让”字句中，动词一般用原形，不用“了”。拼音：Zài 'ràng' zì jù zhōng, dòngcí yìbān yòng yuánxíng, bú yòng 'le'."
+    },
+    {
+      "questionIndex": 3,
+      "question": "因为坏人很多，所以他们总是感到_____。",
+      "questionPinyin": "Yīnwèi huàirén hěnduō, suǒyǐ tāmen zǒng shì gǎndào _____.",
+      "questionEn": "Because there are many wicked people, they always feel _____.",
+      "isCorrect": true,
+      "correctAnswer": "不安",
+      "correctAnswerPinyin": "bù ān",
+      "userAnswer": "不安",
+      "userAnswerPinyin": "bù ān",
+      "explain": "中文：正确答案是不安，表示因为环境不好而感到担心、不平静。拼音：Zhōngwén: Zhèngquè dá'àn shì bù ān, biǎoshì yīnwèi huánjìng bù hǎo ér gǎndào dānxīn, bù píngjìng. English: The correct answer is uneasy. It means feeling worried and unsettled because of a bad environment."
+    },
+    {
+      "questionIndex": 4,
+      "question": "恶人没有平安。",
+      "questionPinyin": "Èrén méiyǒu píng'ān.",
+      "questionEn": "Wicked people have no peace.",
+      "isCorrect": true,
+      "correctAnswer": "是",
+      "correctAnswerPinyin": "",
+      "userAnswer": "是",
+      "userAnswerPinyin": "",
+      "explain": "中文：这句话是正确的，表示恶人得不到真正的平安。拼音：Zhōngwén: Zhè jù huà shì zhèngquè de, biǎoshì èrén débùdào zhēnzhèng de píng'ān. English: This statement is true. It means wicked people do not gain real peace."
+    },
+    {
+      "questionIndex": 5,
+      "question": "“消逝” 最接近哪一个意思？",
+      "questionPinyin": "Xiāoshì zuì jiējìn nǎ yí gè yìsi?",
+      "questionEn": "",
+      "isCorrect": true,
+      "correctAnswer": "消失",
+      "correctAnswerPinyin": "xiāoshī",
+      "userAnswer": "消失",
+      "userAnswerPinyin": "xiāoshī",
+      "explain": ""
+    },
+    {
+      "questionIndex": 6,
+      "question": "当一个人感到害怕、紧张时，这种情绪叫做什么？",
+      "questionPinyin": "Dāng yí gè rén gǎndào hàipà, jǐnzhāng shí, zhè zhǒng qíngxù jiàozuò shénme?",
+      "questionEn": "",
+      "isCorrect": true,
+      "correctAnswer": "恐惧",
+      "correctAnswerPinyin": "kǒngjù",
+      "userAnswer": "恐惧",
+      "userAnswerPinyin": "kǒngjù",
+      "explain": ""
+    },
+    {
+      "questionIndex": 7,
+      "question": "虽然他很累，还是坚持把工作_____。",
+      "questionPinyin": "Suīrán tā hěn lèi, háishi jiānchí bǎ gōngzuò _____.",
+      "questionEn": "",
+      "isCorrect": true,
+      "correctAnswer": "做完",
+      "correctAnswerPinyin": "zuòwán",
+      "userAnswer": "做完",
+      "userAnswerPinyin": "zuòwán",
+      "explain": "English: The correct answer is 做完 (zuòwán). It means to finish doing something completely. 简单中文：工作做完了。 Pinyin: gōngzuò zuòwán le."
+    },
+    {
+      "questionIndex": 8,
+      "question": "我们不应该_____蝴蝶。",
+      "questionPinyin": "Wǒmen bù yīnggāi _____ húdié.",
+      "questionEn": "We should not _____ butterflies.",
+      "isCorrect": true,
+      "correctAnswer": "追逐",
+      "correctAnswerPinyin": "zhuīzhú",
+      "userAnswer": "追逐",
+      "userAnswerPinyin": "zhuīzhú",
+      "explain": "中文：正确答案是追逐，表示追赶蝴蝶。拼音：Zhōngwén: Zhèngquè dá'àn shì zhuīzhú, biǎoshì zhuīgǎn húdié. English: The correct answer is chase. It means running after butterflies."
+    },
+    {
+      "questionIndex": 9,
+      "question": "我____去过北京，但是我很想去。",
+      "questionPinyin": "Wǒ ____ qùguo Běijīng, dànshì wǒ hěn xiǎng qù.",
+      "questionEn": "",
+      "isCorrect": false,
+      "correctAnswer": "没有",
+      "correctAnswerPinyin": "méiyǒu",
+      "userAnswer": "已经",
+      "userAnswerPinyin": "yǐjīng",
+      "explain": "English: The correct answer is 没有 (méiyǒu). This sentence uses the pattern “没有去过”. 简单中文：我没有去过北京。 Pinyin: wǒ méiyǒu qù guò Běijīng."
+    },
+    {
+      "questionIndex": 10,
+      "question": "“灵魂” 的英文是？",
+      "questionPinyin": "Línghún de yīngwén shì?",
+      "questionEn": "",
+      "isCorrect": true,
+      "correctAnswer": "Soul",
+      "correctAnswerPinyin": "",
+      "userAnswer": "Soul",
+      "userAnswerPinyin": "",
+      "explain": ""
+    }
+  ]
+}
