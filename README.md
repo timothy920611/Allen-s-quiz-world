@@ -1,51 +1,37 @@
-# Allen 語言學習測驗
+# Allen 共享題庫
 
-前端仍使用原本的 GitHub Pages 網址，資料改存 Firebase 專案 **language**（ID：`language-timothy920611`）。
+純 HTML、CSS、ES Modules 的語言學習 Web App，GitHub Pages 直接發布。Firebase Web modular SDK 13.0.0 從官方 CDN 載入；後端只有 Firebase Authentication 與 Cloud Firestore，沒有 Cloud Functions 或伺服器。
 
-## 資料架構
+沒有帳號設定、登入按鈕或老師角色。每個人都能上傳共享題庫，其他訪客重新整理即可使用。背景匿名驗證提供 Rules 所需的 UID；作答紀錄只供同一瀏覽器匿名身分讀取。所有動態文字以 `textContent` 呈現。
 
-Cloud Firestore Enterprise Native 資料庫：`allen`。所有應用程式資料集中在 `Allen` 下：
+## 操作與設定
 
-- `Allen/app`：應用程式與遷移來源資訊。
-- `Allen/app/quiz_data/{id}`：原始題庫及新上傳題庫（`questionsJson` 保留不同題型的完整欄位）。
-- `Allen/app/records/{id}`：成績、作答明細、學生匿名 UID。
-- `Allen/app/examples/example`：原本的 JSON 格式範例。
+[逐步設定與安全清單：SETUP.md](./SETUP.md) 涵蓋 Firebase、授權網域、API Key HTTP referrer 限制、App Check／reCAPTCHA 初始化、預算警示、GitHub 2FA、main 保護與 Pages。
 
-學生直接作答，系統會建立匿名 Firebase 身分。題庫可公開讀取；學生只可新增、讀取自己的成績。老師使用 **timothy920611@gmail.com** 的 Google 帳號登入，可上傳新題庫與查看所有成績。既有 13 份紀錄沒有 Firebase UID，遷移時以 `legacy` 標記，只供老師查看。原本瀏覽器內的考卷仍可從本機歷史紀錄開啟。匿名帳號的雲端紀錄不能自動跨裝置識別；刪除網站資料會失去該匿名身分。
+目前專案：`language-timothy920611`（顯示名稱 language），資料庫 `allen`，台灣 `asia-east1`。共享資料在 `Allen/app/banks`，上傳者識別在私有 `bankOwners`，私人作答紀錄在 `Allen/app/users/{uid}/records`。原 66 題會轉入新的共享結構，舊成績保留於 Firebase 的封鎖路徑。
 
-三個頁面共用 `app/src/firebase.js` 資料存取層及 `app/src/auth-ui.js` 登入元件。Enterprise 查詢使用 Firestore Lite Pipeline，新增與單筆查詢使用 Lite Core 操作，不依賴即時監聽。題庫在瀏覽器隨機抽題、計分，適用學習練習；分數並非伺服器驗證的正式考試成績。變更老師帳號時須同步修改 `app/src/firebase-config.js` 與 `firestore.rules` 並重新部署規則。
+## 本機與測試
 
-## 開發、測試與建置
+直接使用靜態 HTTP server 即可，不要以 file:// 開啟 ES Modules。
 
-需要 Node.js 24.12 以上；模擬器需要 Java 21 以上。
+```sh
+python3 -m http.server 5173 --bind 127.0.0.1
+```
+
+測試依賴需要 Node.js 24.12+，規則模擬器需要 Java 21+：
 
 ```sh
 npm ci
-npm run dev
 npm test
 npx -y firebase-tools@latest emulators:exec --only firestore --project demo-language-allen 'npm run test:rules'
-npm run build
 ```
 
-修改 `app/*.html` 和 `app/src/*.js`。`npm run build` 會產生 `dist/`，並同步根目錄的 HTML 與 `assets/`；請一起提交根目錄產物以相容目前 GitHub Pages 的根目錄發佈方式。Firebase 的 Web config 是公開識別資訊，存取權由 Authentication 與 Firestore Rules 控制；不要把管理金鑰或 GitHub Token 放進前端。
-
-本機連到模擬器需設定 `VITE_USE_EMULATORS=true`，並開啟 Firestore 和 Auth 模擬器。正式建置請不要設定此變數。
-
-## 建立資料庫與部署
-
-專案、Allen Web App、Google／匿名登入與台灣 `asia-east1` 的 `allen` 資料庫已建立。已逐欄核對匯入 66 題、13 份歷史紀錄與 JSON 範例。以下為重建／維護命令：
+本機瀏覽器測試需另開 Auth／Firestore 模擬器：
 
 ```sh
-npx -y firebase-tools@latest firestore:databases:create allen --project language-timothy920611 --edition enterprise --location asia-east1 --firestore-data-access ENABLED --mongodb-compatible-data-access DISABLED
-npx -y firebase-tools@latest deploy --only auth,firestore --project language-timothy920611
-npm run migrate
-npm run migrate -- --write
+npx -y firebase-tools@latest emulators:start --only auth,firestore --project demo-language-allen
 ```
 
-`npm run migrate` 僅列出遷移計畫，`--write` 才實際寫入。腳本使用 Firebase 官方 MCP，不讀取舊網頁的 GitHub 金鑰；需先用 Firebase CLI 登入或設定 Application Default Credentials。檔案路徑產生固定 ID，重跑不覆蓋現有文件，並核對每個寫入欄位。若目的文件內容不同，會停止而不覆蓋。成功後產生 `migration-report.json`，包含來源 SHA-256 與核對時間。
+再開 `http://127.0.0.1:5173/?emulator=1`。這個開關只在 localhost／127.0.0.1 有效，正式網域不會因查詢參數改連模擬器。測試必須先放入共享題庫或透過上傳表單加入；正式資料不會自動複製到模擬器。
 
-`migration-report.json` 記錄已完成的遷移核對。正式前端透過 Firebase SDK 連線，原 GitHub 寫入金鑰與資料 API 已移除。根目錄舊 JSON 暫留為來源備份，正式前端不再讀寫它們；GitHub 上原本公開的資料及歷史版本仍可被讀取。舊網頁內曾包含混淆的 GitHub Token，應在 GitHub 撤銷該舊 Token；本版本已移除金鑰與 GitHub 資料讀寫。
-
-## 權限規則說明
-
-已建立 prototype Security Rules，限制老師身分、成績擁有者、新增資料格式、大小與伺服器時間，並禁止前端修改或刪除歷史紀錄。模擬器測試涵蓋未登入／跨學生讀取、冒用老師、竄改擁有者、額外欄位、超大資料、時間戳與更新／刪除拒絕，也測試正式使用的 Pipeline 查詢。規則仍應在廣泛分享應用程式前人工檢閱。
+`firebaseConfig` 與 reCAPTCHA site key 是公開識別資訊。管理憑證、secret key、debug token、私人紀錄與備份不可提交 repo。App Check 目前需填入真實 site key 並在 Console 註冊／監測／enforce；不要把預留程式當作已啟用保護。

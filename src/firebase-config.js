@@ -8,4 +8,6 @@ export const firebaseConfig = {
 };
 export const DATABASE_ID = "allen";
 export const ROOT_PATH = "Allen/app";
-export const TEACHER_EMAIL = "timothy920611@gmail.com";
+
+// Public reCAPTCHA site key only. Keep the secret key in Firebase Console.
+export const APP_CHECK = {siteKey: "", provider: "v3"};
