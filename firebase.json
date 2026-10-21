@@ -1,0 +1,37 @@
+{
+  "auth": {
+    "authorizedDomains": [
+      "localhost",
+      "timothy920611.github.io",
+      "language-timothy920611.firebaseapp.com",
+      "language-timothy920611.web.app"
+    ],
+    "providers": {
+      "anonymous": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "Allen 語言學習",
+        "supportEmail": "timothy920611@gmail.com"
+      }
+    }
+  },
+  "firestore": {
+    "database": "allen",
+    "edition": "enterprise",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json",
+    "location": "asia-east1"
+  },
+  "emulators": {
+    "firestore": {
+      "port": 8080,
+      "edition": "enterprise"
+    },
+    "auth": {
+      "port": 9099
+    },
+    "ui": {
+      "enabled": false
+    },
+    "singleProjectMode": true
+  }
+}
