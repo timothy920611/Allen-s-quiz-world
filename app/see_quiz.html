@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>考卷檢視 - Quiz Review</title>
+    <link rel="icon" type="image/png" href="nice.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .pinyin { color: #6366f1; font-size: 0.85em; font-weight: normal; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; }
+            .print-card { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <div class="max-w-3xl mx-auto p-4 md:p-8">
+
+        <!-- 頂部導覽 -->
+        <div class="no-print flex items-center justify-between mb-6 gap-4">
+            <a href="index.html" class="flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-800 bg-white border border-indigo-100 px-4 py-2 rounded-full shadow-sm transition-all">
+                ← 返回首頁
+            </a>
+            <button onclick="window.print()" class="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-slate-800 bg-white border border-slate-200 px-4 py-2 rounded-full shadow-sm transition-all">
+                🖨️ 列印考卷
+            </button>
+        </div>
+
+        <!-- 錯誤畫面 -->
+        <div id="errorView" class="hidden text-center py-20">
+            <div class="text-6xl mb-4">😢</div>
+            <h2 class="text-2xl font-black text-slate-700 mb-2">找不到這份考卷</h2>
+            <p class="text-slate-500 mb-6">紀錄可能已被清除，或連結已失效。</p>
+            <a href="index.html" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-full font-bold transition-all">
+                回首頁
+            </a>
+        </div>
+
+        <!-- 考卷主體 -->
+        <div id="quizView" class="hidden fade-in">
+
+            <!-- 標題卡 -->
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 md:p-8 mb-6 text-center">
+                <div class="text-5xl mb-3" id="headerEmoji">📋</div>
+                <h1 class="text-3xl font-black text-slate-800 mb-1">考卷紀錄</h1>
+                <p class="text-indigo-500 pinyin text-base">Kǎojuàn jìlù · Quiz Review</p>
+
+                <div class="mt-6 grid grid-cols-3 gap-4 text-center">
+                    <div class="bg-indigo-50 rounded-2xl p-4">
+                        <div class="text-3xl font-black text-indigo-600" id="scoreVal">—</div>
+                        <div class="text-xs text-slate-500 mt-1 font-bold">分數</div>
+                    </div>
+                    <div class="bg-emerald-50 rounded-2xl p-4">
+                        <div class="text-3xl font-black text-emerald-600" id="correctVal">—</div>
+                        <div class="text-xs text-slate-500 mt-1 font-bold">答對</div>
+                    </div>
+                    <div class="bg-slate-100 rounded-2xl p-4">
+                        <div class="text-3xl font-black text-slate-600" id="totalVal">—</div>
+                        <div class="text-xs text-slate-500 mt-1 font-bold">總題數</div>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex flex-wrap justify-center gap-3 text-xs text-slate-500">
+                    <span>📅 <span id="dateVal">—</span></span>
+                    <span>📚 <span id="rangeVal">—</span></span>
+                </div>
+            </div>
+
+            <!-- 各題卡片 -->
+            <div id="itemList" class="space-y-4"></div>
+
+            <!-- 底部按鈕 -->
+            <div class="no-print mt-8 text-center">
+                <a href="index.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-4 rounded-full font-black text-lg shadow-lg transition-all">
+                    返回首頁 🏠
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module" src="./src/see_quiz.js"></script>
+</body>
+</html>

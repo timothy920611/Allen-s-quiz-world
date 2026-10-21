@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allen/app contains metadata; datasets use JSON text to preserve legacy question schemas.
+    // Results contain bounded summary fields and opaque reviewJson, escaped by every renderer.
+    // Records are immutable. Legacy migrated records have ownerUid 'legacy' (teacher-only).
+    function isAuthenticated() { return request.auth != null; }
+    function isTeacher() {
+      return isAuthenticated()
+        && request.auth.token.firebase.sign_in_provider == 'google.com'
+        && request.auth.token.email_verified == true
+        && request.auth.token.email == 'timothy920611@gmail.com';
+    }
+    function isOwner(data) { return isAuthenticated() && data.ownerUid == request.auth.uid; }
+    function appExists() { return exists(/databases/$(database)/documents/Allen/app); }
+    function boundedText(value,max) { return value is string && value.size() > 0 && value.size() <= max; }
+    function validDataset(d) {
+      return d.keys().hasAll(['source','questionsJson','questionCount','uploadedAt'])
+        && d.keys().hasOnly(['source','questionsJson','questionCount','uploadedAt'])
+        && boundedText(d.source,255) && boundedText(d.questionsJson,700000)
+        && d.questionCount is int && d.questionCount > 0 && d.questionCount <= 500
+        && d.uploadedAt is timestamp && d.uploadedAt == request.time;
+    }
+    function validRecord(d) {
+      return d.keys().hasAll(['ownerUid','createdAt','date','studentName','score','correct','total','range','reviewJson'])
+        && d.keys().hasOnly(['ownerUid','createdAt','date','studentName','score','correct','total','range','reviewJson'])
+        && boundedText(d.ownerUid,128) && isOwner(d)
+        && d.createdAt is timestamp && d.createdAt == request.time
+        && boundedText(d.date,35)
+        && boundedText(d.studentName,100) && boundedText(d.range,30)
+        && d.score is int && d.score >= 0 && d.score <= 100
+        && d.correct is int && d.correct >= 0
+        && d.total is int && d.total >= 1 && d.total <= 500 && d.correct <= d.total
+        && boundedText(d.reviewJson,150000);
+    }
+    match /Allen/app {
+      allow read: if isTeacher();
+      allow write: if false;
+      match /quiz_data/{id} {
+        allow read: if appExists();
+        allow create: if appExists() && isTeacher() && validDataset(request.resource.data);
+        allow update,delete: if false;
+      }
+      match /records/{id} {
+        allow get: if appExists() && isAuthenticated() && (resource == null || isTeacher() || isOwner(resource.data));
+        allow list: if appExists() && (isTeacher() || isOwner(resource.data));
+        allow create: if appExists() && validRecord(request.resource.data);
+        allow update,delete: if false;
+      }
+      match /examples/{id} {
+        allow read: if appExists() && isTeacher();
+        allow write: if false;
+      }
+    }
+    match /{document=**} { allow read,write: if false; }
+  }
+}

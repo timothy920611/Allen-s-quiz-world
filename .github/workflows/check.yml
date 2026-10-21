@@ -1,0 +1,20 @@
+name: Verify Firebase app
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+      - run: npm test
+      - run: npx -y firebase-tools@latest emulators:exec --only firestore --project demo-language-allen 'npm run test:rules'
+      - run: npm run build
+      - run: git diff --exit-code -- index.html admin.html see_quiz.html assets/
