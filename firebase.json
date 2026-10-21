@@ -7,11 +7,7 @@
       "language-timothy920611.web.app"
     ],
     "providers": {
-      "anonymous": true,
-      "googleSignIn": {
-        "oAuthBrandDisplayName": "Allen 語言學習",
-        "supportEmail": "timothy920611@gmail.com"
-      }
+      "anonymous": true
     }
   },
   "firestore": {

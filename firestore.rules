@@ -1,55 +1,100 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allen/app contains metadata; datasets use JSON text to preserve legacy question schemas.
-    // Results contain bounded summary fields and opaque reviewJson, escaped by every renderer.
-    // Records are immutable. Legacy migrated records have ownerUid 'legacy' (teacher-only).
-    function isAuthenticated() { return request.auth != null; }
-    function isTeacher() {
-      return isAuthenticated()
-        && request.auth.token.firebase.sign_in_provider == 'google.com'
-        && request.auth.token.email_verified == true
-        && request.auth.token.email == 'timothy920611@gmail.com';
+    // Shared banks intentionally contain only shareable learning content.
+    // bankOwners stores uploader UID separately and is never publicly listed.
+    // users/{uid}/records and answer details are strictly private to that UID.
+    // Legacy Allen/app/records and quiz_data are closed by the final deny rule.
+    function signedIn() { return request.auth != null; }
+    function owns(uid) { return signedIn() && request.auth.uid == uid; }
+    function text(value,maxLength) { return value is string && value.size() <= maxLength; }
+    function nonempty(value,maxLength) { return text(value,maxLength) && value.size() > 0; }
+    function stringList(values,maxCount,maxLength) {
+      return values is list && values.size() <= maxCount
+        && (values.size() == 0 || ((values[0] is string && values[0].size() <= maxLength) && (values.size() == 1 || ((values[1] is string && values[1].size() <= maxLength) && (values.size() == 2 || ((values[2] is string && values[2].size() <= maxLength) && (values.size() == 3 || ((values[3] is string && values[3].size() <= maxLength) && (values.size() == 4 || ((values[4] is string && values[4].size() <= maxLength) && (values.size() == 5 || ((values[5] is string && values[5].size() <= maxLength) && (values.size() == 6 || ((values[6] is string && values[6].size() <= maxLength) && (values.size() == 7 || ((values[7] is string && values[7].size() <= maxLength) && (values.size() == 8 || ((values[8] is string && values[8].size() <= maxLength) && (values.size() == 9 || ((values[9] is string && values[9].size() <= maxLength) && (values.size() == 10 || ((values[10] is string && values[10].size() <= maxLength) && (values.size() == 11 || ((values[11] is string && values[11].size() <= maxLength)))))))))))))))))))))))));
     }
-    function isOwner(data) { return isAuthenticated() && data.ownerUid == request.auth.uid; }
-    function appExists() { return exists(/databases/$(database)/documents/Allen/app); }
-    function boundedText(value,max) { return value is string && value.size() > 0 && value.size() <= max; }
-    function validDataset(d) {
-      return d.keys().hasAll(['source','questionsJson','questionCount','uploadedAt'])
-        && d.keys().hasOnly(['source','questionsJson','questionCount','uploadedAt'])
-        && boundedText(d.source,255) && boundedText(d.questionsJson,700000)
-        && d.questionCount is int && d.questionCount > 0 && d.questionCount <= 500
-        && d.uploadedAt is timestamp && d.uploadedAt == request.time;
+    function indexList(values,optionCount) {
+      return values is list && values.size() <= 4
+        && values.toSet().size() == values.size()
+        && (values.size() == 0 || ((values[0] is int && values[0] >= 0 && values[0] < optionCount) && (values.size() == 1 || ((values[1] is int && values[1] >= 0 && values[1] < optionCount) && (values.size() == 2 || ((values[2] is int && values[2] >= 0 && values[2] < optionCount) && (values.size() == 3 || ((values[3] is int && values[3] >= 0 && values[3] < optionCount) && (values.size() == 4 || ((values[4] is int && values[4] >= 0 && values[4] < optionCount) && (values.size() == 5 || ((values[5] is int && values[5] >= 0 && values[5] < optionCount) && (values.size() == 6 || ((values[6] is int && values[6] >= 0 && values[6] < optionCount) && (values.size() == 7 || ((values[7] is int && values[7] >= 0 && values[7] < optionCount) && (values.size() == 8 || ((values[8] is int && values[8] >= 0 && values[8] < optionCount) && (values.size() == 9 || ((values[9] is int && values[9] >= 0 && values[9] < optionCount) && (values.size() == 10 || ((values[10] is int && values[10] >= 0 && values[10] < optionCount) && (values.size() == 11 || ((values[11] is int && values[11] >= 0 && values[11] < optionCount)))))))))))))))))))))))));
     }
-    function validRecord(d) {
-      return d.keys().hasAll(['ownerUid','createdAt','date','studentName','score','correct','total','range','reviewJson'])
-        && d.keys().hasOnly(['ownerUid','createdAt','date','studentName','score','correct','total','range','reviewJson'])
-        && boundedText(d.ownerUid,128) && isOwner(d)
+    function ownsNewBank(bankId) {
+      let owner = getAfter(/databases/$(database)/documents/Allen/app/bankOwners/$(bankId)).data;
+      return signedIn() && owner.ownerUid == request.auth.uid && owner.createdAt == request.time;
+    }
+    function validQuestion(q,bankId) {
+      let bank = getAfter(/databases/$(database)/documents/Allen/app/banks/$(bankId)).data;
+      return q.keys().hasAll(['position','date','type','question','questionEn','questionPinyin','city','passage','passageEn','passagePinyin','options','optionsEn','optionsPinyin','answerIndexes','shortAnswer','acceptedAnswers','hint','explain'])
+        && q.keys().hasOnly(['position','date','type','question','questionEn','questionPinyin','city','passage','passageEn','passagePinyin','options','optionsEn','optionsPinyin','answerIndexes','shortAnswer','acceptedAnswers','hint','explain'])
+        && bank.createdAt == request.time
+        && q.position is int && q.position >= 1 && q.position <= bank.questionCount
+        && text(q.date,10) && q.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && q.type in ['multiple_choice','true_false','short_answer','reading_comprehension']
+        && nonempty(q.question,4000) && text(q.questionEn,4000) && text(q.questionPinyin,4000)
+        && text(q.city,100) && text(q.passage,10000) && text(q.passageEn,10000) && text(q.passagePinyin,10000)
+        && text(q.hint,2000) && text(q.explain,4000)
+        && stringList(q.options,4,500) && stringList(q.optionsEn,4,500) && stringList(q.optionsPinyin,4,500)
+        && q.optionsEn.size() == q.options.size() && q.optionsPinyin.size() == q.options.size()
+        && indexList(q.answerIndexes,q.options.size())
+        && text(q.shortAnswer,500) && stringList(q.acceptedAnswers,10,500)
+        && ((q.type == 'short_answer' && q.shortAnswer.size() > 0 && q.options.size() == 0 && q.answerIndexes.size() == 0)
+          || (q.type != 'short_answer' && q.options.size() >= 2 && q.answerIndexes.size() > 0 && q.shortAnswer == '' && q.acceptedAnswers.size() == 0))
+        && (q.type != 'true_false' || (q.options.size() == 2 && q.answerIndexes.size() == 1));
+    }
+    function validRecord(d,uid) {
+      return d.keys().hasAll(['ownerUid','createdAt','score','correct','total','bankLabel'])
+        && d.keys().hasOnly(['ownerUid','createdAt','score','correct','total','bankLabel'])
+        && d.ownerUid is string && d.ownerUid == uid
         && d.createdAt is timestamp && d.createdAt == request.time
-        && boundedText(d.date,35)
-        && boundedText(d.studentName,100) && boundedText(d.range,30)
+        && d.total is int && d.total >= 1 && d.total <= 100
+        && d.correct is int && d.correct >= 0 && d.correct <= d.total
         && d.score is int && d.score >= 0 && d.score <= 100
-        && d.correct is int && d.correct >= 0
-        && d.total is int && d.total >= 1 && d.total <= 500 && d.correct <= d.total
-        && boundedText(d.reviewJson,150000);
+        && d.score == math.round(100.0 * d.correct / d.total)
+        && nonempty(d.bankLabel,100);
     }
-    match /Allen/app {
-      allow read: if isTeacher();
-      allow write: if false;
-      match /quiz_data/{id} {
-        allow read: if appExists();
-        allow create: if appExists() && isTeacher() && validDataset(request.resource.data);
+    function validAnswer(d,uid,recordId) {
+      let record = getAfter(/databases/$(database)/documents/Allen/app/users/$(uid)/records/$(recordId)).data;
+      return record.createdAt == request.time && record.ownerUid == uid
+        && d.keys().hasAll(['questionIndex','question','questionEn','questionPinyin','isCorrect','userAnswer','userAnswerPinyin','correctAnswer','correctAnswerPinyin','explain'])
+        && d.keys().hasOnly(['questionIndex','question','questionEn','questionPinyin','isCorrect','userAnswer','userAnswerPinyin','correctAnswer','correctAnswerPinyin','explain'])
+        && d.questionIndex is int && d.questionIndex >= 1 && d.questionIndex <= record.total
+        && nonempty(d.question,4000) && text(d.questionEn,4000) && text(d.questionPinyin,4000)
+        && d.isCorrect is bool && text(d.userAnswer,8000) && text(d.userAnswerPinyin,8000)
+        && text(d.correctAnswer,8000) && text(d.correctAnswerPinyin,8000) && text(d.explain,4000);
+    }
+    match /Allen/app/bankOwners/{bankId} {
+      allow get: if signedIn() && resource.data.ownerUid == request.auth.uid;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasAll(['ownerUid','createdAt'])
+        && request.resource.data.keys().hasOnly(['ownerUid','createdAt'])
+        && request.resource.data.ownerUid is string && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.createdAt is timestamp && request.resource.data.createdAt == request.time;
+      allow list,update,delete: if false;
+    }
+    match /Allen/app/banks/{bankId} {
+      // User explicitly requested that every uploaded bank is shared with everyone.
+      allow get,list: if signedIn();
+      allow create: if signedIn() && ownsNewBank(bankId)
+        && request.resource.data.keys().hasAll(['title','questionCount','createdAt'])
+        && request.resource.data.keys().hasOnly(['title','questionCount','createdAt'])
+        && nonempty(request.resource.data.title,100)
+        && request.resource.data.questionCount is int && request.resource.data.questionCount >= 1 && request.resource.data.questionCount <= 100
+        && request.resource.data.createdAt is timestamp && request.resource.data.createdAt == request.time;
+      allow update,delete: if false;
+      match /questions/{questionId} {
+        allow get,list: if signedIn() && exists(/databases/$(database)/documents/Allen/app/banks/$(bankId));
+        allow create: if signedIn() && ownsNewBank(bankId) && validQuestion(request.resource.data,bankId);
         allow update,delete: if false;
       }
-      match /records/{id} {
-        allow get: if appExists() && isAuthenticated() && (resource == null || isTeacher() || isOwner(resource.data));
-        allow list: if appExists() && (isTeacher() || isOwner(resource.data));
-        allow create: if appExists() && validRecord(request.resource.data);
+    }
+    match /Allen/app/users/{uid}/records/{recordId} {
+      allow get,list: if owns(uid);
+      allow create: if owns(uid) && validRecord(request.resource.data,uid);
+      allow update,delete: if false;
+      match /answers/{answerId} {
+        allow get,list: if owns(uid) && exists(/databases/$(database)/documents/Allen/app/users/$(uid)/records/$(recordId));
+        allow create: if owns(uid) && validAnswer(request.resource.data,uid,recordId);
         allow update,delete: if false;
-      }
-      match /examples/{id} {
-        allow read: if appExists() && isTeacher();
-        allow write: if false;
       }
     }
     match /{document=**} { allow read,write: if false; }
